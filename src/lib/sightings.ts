@@ -1,0 +1,22 @@
+import { supabase } from "./supabase";
+
+export async function getSightings() {
+  return await supabase
+    .from("sightings")
+    .select("*")
+    .order("created_at", { ascending: false });
+}
+
+export async function createSighting(
+  species: string,
+  count: number,
+  notes: string,
+) {
+  return await supabase.from("sightings").insert([
+    {
+      species,
+      count,
+      notes: notes || null,
+    },
+  ]);
+}
