@@ -63,7 +63,7 @@ export default function Home() {
     fetchSightings();
   }
 
-  async function handleDelete(id: number) {
+  async function handleDelete(id: string) {
     const { error } = await deleteSighting(id);
 
     if (error) {

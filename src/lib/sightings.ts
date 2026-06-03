@@ -21,6 +21,6 @@ export async function createSighting(
   ]);
 }
 
-export async function deleteSighting(id: number) {
+export async function deleteSighting(id: string) {
   return await supabase.from("sightings").delete().eq("id", id);
 }
