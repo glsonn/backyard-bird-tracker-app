@@ -143,6 +143,10 @@ export default function Home() {
                   <br />
                 </>
               )}
+              <small>
+                Recorded on {new Date(sighting.created_at).toLocaleString()}
+              </small>
+              <br />
               <button onClick={() => handleDelete(sighting.id)}>Delete</button>
             </li>
           ))}
