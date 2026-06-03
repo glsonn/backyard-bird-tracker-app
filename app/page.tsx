@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { getSightings, createSighting } from "@/lib/sightings";
+import { getSightings, createSighting, deleteSighting } from "@/lib/sightings";
 
 const birds = [
   "Northern Cardinal",
@@ -59,6 +59,18 @@ export default function Home() {
     setNotes("");
     setCount(1);
     setSpecies(birds[0]);
+
+    fetchSightings();
+  }
+
+  async function handleDelete(id: number) {
+    const { error } = await deleteSighting(id);
+
+    if (error) {
+      console.error(error);
+      alert("Error deleting sighting");
+      return;
+    }
 
     fetchSightings();
   }
@@ -131,6 +143,7 @@ export default function Home() {
                   <br />
                 </>
               )}
+              <button onClick={() => handleDelete(sighting.id)}>Delete</button>
             </li>
           ))}
         </ul>

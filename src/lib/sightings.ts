@@ -20,3 +20,7 @@ export async function createSighting(
     },
   ]);
 }
+
+export async function deleteSighting(id: number) {
+  return await supabase.from("sightings").delete().eq("id", id);
+}
