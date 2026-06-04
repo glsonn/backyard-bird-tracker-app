@@ -43,7 +43,14 @@ export default function SightingsForm({
         <select
           value={species}
           onChange={(e) => setSpecies(e.target.value)}
-          style={{ padding: "0.5rem", width: "100%" }}
+          style={{
+            padding: "0.5rem",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            fontSize: "1rem",
+            width: "100%",
+            marginTop: "0.25rem",
+          }}
         >
           {birds.map((bird) => (
             <option key={bird} value={bird}>
@@ -61,7 +68,15 @@ export default function SightingsForm({
           min="1"
           value={count}
           onChange={(e) => setCount(Number(e.target.value))}
-          style={{ padding: "0.5rem", width: "100%" }}
+          style={{
+            padding: "0.5rem",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            fontSize: "1rem",
+            width: "100%",
+            marginTop: "0.25rem",
+            boxSizing: "border-box",
+          }}
         />
       </div>
 
@@ -72,15 +87,61 @@ export default function SightingsForm({
           rows={4}
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          style={{ padding: "0.5rem", width: "100%" }}
+          style={{
+            padding: "0.5rem",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            fontSize: "1rem",
+            width: "100%",
+            marginTop: "0.25rem",
+            boxSizing: "border-box",
+          }}
         />
       </div>
 
-      <button onClick={handleSubmit} disabled={loading}>
+      <button
+        onClick={handleSubmit}
+        disabled={loading}
+        style={{
+          marginTop: "1rem",
+          padding: "0.6rem 1rem",
+          border: "none",
+          borderRadius: "6px",
+          backgroundColor: loading ? "#999" : "#2e7d32",
+          color: "white",
+          cursor: loading ? "not-allowed" : "pointer",
+          fontSize: "1rem",
+          width: "100%",
+          transition: "background-color 0.2s ease",
+        }}
+        onMouseEnter={(e) => {
+          if (!loading) {
+            e.currentTarget.style.backgroundColor = "#256628";
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!loading) {
+            e.currentTarget.style.backgroundColor = "#2e7d32";
+          }
+        }}
+      >
         {loading ? "Adding..." : "Add Sighting"}
       </button>
 
-      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+      {successMessage && (
+        <div
+          style={{
+            marginBottom: "0.5rem",
+            padding: "0.75rem 1rem",
+            borderRadius: "6px",
+            backgroundColor: "#e6f4ea",
+            color: "#2e7d32",
+            border: "1px solid #b7dfc1",
+          }}
+        >
+          {successMessage}
+        </div>
+      )}
     </div>
   );
 }
