@@ -21,18 +21,13 @@ export default function SightingsList({
   deletingId,
   onDelete,
 }: Props) {
-  if (isFetching)
+  if (isFetching && sightings.length === 0) {
     return (
-      <p
-        style={{
-          textAlign: "center",
-          color: "#666",
-          padding: "1rem",
-        }}
-      >
+      <p style={{ textAlign: "center", color: "#666", padding: "1rem" }}>
         Loading sightings...
       </p>
     );
+  }
 
   if (sightings.length === 0)
     return (
@@ -50,66 +45,87 @@ export default function SightingsList({
       </p>
     );
 
+  const isRefreshing = isFetching && sightings.length > 0;
+
   return (
-    <ul style={{ padding: 0 }}>
-      {sightings.map((sighting) => (
-        <li
-          key={sighting.id}
+    <>
+      {isRefreshing && (
+        <p
           style={{
-            listStyle: "none",
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            padding: "1rem",
-            marginBottom: "1rem",
-            backgroundColor: "#fff",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-            lineHeight: "1.5",
+            textAlign: "center",
+            color: "#888",
+            fontSize: "0.9rem",
+            marginBottom: "0.5rem",
           }}
         >
-          <div
+          Updating sightings...
+        </p>
+      )}
+
+      <ul style={{ padding: 0 }}>
+        {sightings.map((sighting) => (
+          <li
+            key={sighting.id}
             style={{
-              fontWeight: "bold",
-              fontSize: "1.1rem",
-              marginBottom: "0.5rem",
+              listStyle: "none",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              padding: "1rem",
+              marginBottom: "1rem",
+              backgroundColor: "#fff",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+              lineHeight: "1.5",
             }}
           >
-            {sighting.species}
-          </div>
-          <br />
-          Count: {sighting.count}
-          <br />
-          {sighting.notes && (
-            <>
-              Notes: {sighting.notes}
-              <br />
-            </>
-          )}
-          <small>{new Date(sighting.created_at).toLocaleString()}</small>
-          <br />
-          <button
-            onClick={() => onDelete(sighting.id)}
-            disabled={deletingId === sighting.id}
-            style={{
-              marginTop: "0.5rem",
-              padding: "0.5rem 0.75rem",
-              border: "none",
-              borderRadius: "6px",
-              backgroundColor: "#d9534f",
-              color: "white",
-              cursor: deletingId === sighting.id ? "not-allowed" : "pointer",
-              transition: "background-color 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#c9302c";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#d9534f";
-            }}
-          >
-            {deletingId === sighting.id ? "Deleting..." : "Delete"}
-          </button>
-        </li>
-      ))}
-    </ul>
+            <div
+              style={{
+                fontWeight: "bold",
+                fontSize: "1.1rem",
+                marginBottom: "0.5rem",
+              }}
+            >
+              {sighting.species}
+            </div>
+            <br />
+            Count: {sighting.count}
+            <br />
+            {sighting.notes && (
+              <>
+                Notes: {sighting.notes}
+                <br />
+              </>
+            )}
+            <small>{new Date(sighting.created_at).toLocaleString()}</small>
+            <br />
+            <button
+              onClick={() => onDelete(sighting.id)}
+              disabled={deletingId === sighting.id}
+              style={{
+                marginTop: "0.5rem",
+                padding: "0.5rem 0.75rem",
+                border: "none",
+                borderRadius: "6px",
+                backgroundColor:
+                  deletingId === sighting.id ? "#e57373" : "#d9534f",
+                color: "white",
+                cursor: deletingId === sighting.id ? "not-allowed" : "pointer",
+                opacity: deletingId === sighting.id ? 0.7 : 1,
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                if (deletingId === sighting.id) return;
+                e.currentTarget.style.backgroundColor = "#c9302c";
+              }}
+              onMouseLeave={(e) => {
+                if (deletingId === sighting.id) return;
+                e.currentTarget.style.backgroundColor = "#d9534f";
+              }}
+            >
+              {deletingId === sighting.id ? "Deleting…" : "Delete"}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }

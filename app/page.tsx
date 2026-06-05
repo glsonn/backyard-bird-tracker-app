@@ -47,7 +47,11 @@ export default function Home() {
     fetchSightings();
   }, []);
 
-  async function addSighting(species: string, count: number, notes: string) {
+  async function addSighting(
+    species: string,
+    count: number,
+    notes: string,
+  ): Promise<boolean> {
     setLoading(true);
 
     const { error } = await createSighting(species, count, notes);
@@ -57,13 +61,15 @@ export default function Home() {
     if (error) {
       console.error(error);
       alert("Error adding sighting");
-      return;
+      return false;
     }
 
     fetchSightings();
 
     setSuccessMessage("Sighting added successfully!");
     setTimeout(() => setSuccessMessage(""), 2500);
+
+    return true;
   }
 
   async function handleDelete(id: string) {

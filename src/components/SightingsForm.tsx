@@ -4,7 +4,7 @@ import { useState } from "react";
 
 type Props = {
   birds: string[];
-  onAdd: (species: string, count: number, notes: string) => Promise<void>;
+  onAdd: (species: string, count: number, notes: string) => Promise<boolean>;
   loading: boolean;
   successMessage: string;
 };
@@ -20,12 +20,13 @@ export default function SightingsForm({
   const [notes, setNotes] = useState("");
 
   async function handleSubmit() {
-    await onAdd(species, count, notes);
+    const success = await onAdd(species, count, notes);
 
-    // reset form after successful submit
-    setSpecies(birds[0]);
-    setCount(1);
-    setNotes("");
+    if (success) {
+      setSpecies(birds[0]);
+      setCount(1);
+      setNotes("");
+    }
   }
 
   return (
