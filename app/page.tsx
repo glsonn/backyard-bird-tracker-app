@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getSightings, createSighting, deleteSighting } from "@/lib/sightings";
 import SightingsForm from "@/components/SightingsForm";
 import SightingsList from "@/components/SightingsList";
+import type { Sighting } from "@/types/sighting";
 
 const birds = [
   "Northern Cardinal",
@@ -13,14 +14,6 @@ const birds = [
   "American Goldfinch",
   "Downy Woodpecker",
 ];
-
-type Sighting = {
-  id: string;
-  species: string;
-  count: number;
-  notes: string | null;
-  created_at: string;
-};
 
 export default function Home() {
   const [sightings, setSightings] = useState<Sighting[]>([]);
@@ -98,7 +91,9 @@ export default function Home() {
 
   return (
     <main style={{ padding: "2rem", maxWidth: "700px", margin: "0 auto" }}>
-      <h1>Bird Tracker</h1>
+      <h1 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem" }}>
+        Backyard Bird Tracker
+      </h1>
 
       <SightingsForm
         birds={birds}
