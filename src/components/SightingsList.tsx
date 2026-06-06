@@ -78,7 +78,12 @@ export default function SightingsList({
                 gap: "1rem",
               }}
             >
-              <div style={{ flex: 1 }}>
+              <div
+                style={{
+                  flex: 1,
+                  color: "#222",
+                }}
+              >
                 <div
                   style={{
                     fontWeight: "bold",

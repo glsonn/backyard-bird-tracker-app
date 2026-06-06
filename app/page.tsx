@@ -22,7 +22,7 @@ export default function Home() {
   const [successMessage, setSuccessMessage] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  async function fetchSightings() {
+  async function fetchSightings(): Promise<void> {
     setIsFetching(true);
     const { data, error } = await getSightings();
 
@@ -57,7 +57,7 @@ export default function Home() {
       return false;
     }
 
-    fetchSightings();
+    await fetchSightings();
 
     setSuccessMessage("Sighting added successfully!");
     setTimeout(() => setSuccessMessage(""), 2500);
@@ -86,7 +86,7 @@ export default function Home() {
       return;
     }
 
-    fetchSightings();
+    await fetchSightings();
   }
 
   return (
