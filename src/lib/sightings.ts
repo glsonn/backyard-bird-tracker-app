@@ -12,13 +12,17 @@ export async function createSighting(
   count: number,
   notes: string,
 ) {
-  return await supabase.from("sightings").insert([
-    {
-      species,
-      count,
-      notes: notes || null,
-    },
-  ]);
+  return await supabase
+    .from("sightings")
+    .insert([
+      {
+        species,
+        count,
+        notes: notes || null,
+      },
+    ])
+    .select()
+    .single();
 }
 
 export async function deleteSighting(id: string) {

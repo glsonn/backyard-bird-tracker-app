@@ -47,22 +47,26 @@ export default function Home() {
   ): Promise<boolean> {
     setLoading(true);
 
-    const { error } = await createSighting(species, count, notes);
+    try {
+      const { data, error } = await createSighting(species, count, notes);
 
-    setLoading(false);
+      if (error) {
+        console.error(error);
+        alert("Error adding sighting");
+        return false;
+      }
 
-    if (error) {
-      console.error(error);
-      alert("Error adding sighting");
-      return false;
+      if (data) {
+        setSightings((prev) => [data, ...prev]);
+      }
+
+      setSuccessMessage("Sighting added successfully!");
+      setTimeout(() => setSuccessMessage(""), 2500);
+
+      return true;
+    } finally {
+      setLoading(false);
     }
-
-    await fetchSightings();
-
-    setSuccessMessage("Sighting added successfully!");
-    setTimeout(() => setSuccessMessage(""), 2500);
-
-    return true;
   }
 
   async function handleDelete(id: string) {
@@ -76,19 +80,20 @@ export default function Home() {
 
     setDeletingId(id);
 
-    const { error } = await deleteSighting(id);
+    try {
+      const { error } = await deleteSighting(id);
 
-    setDeletingId(null);
+      if (error) {
+        console.error(error);
+        alert("Error deleting sighting");
+        return;
+      }
 
-    if (error) {
-      console.error(error);
-      alert("Error deleting sighting");
-      return;
+      setSightings((prev) => prev.filter((sighting) => sighting.id !== id));
+    } finally {
+      setDeletingId(null);
     }
-
-    await fetchSightings();
   }
-
   return (
     <main style={{ padding: "2rem", maxWidth: "700px", margin: "0 auto" }}>
       <h1 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem" }}>
