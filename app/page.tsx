@@ -73,13 +73,13 @@ export default function Home() {
 
       setSuccessMessage("Sighting added successfully!");
       setTimeout(() => setSuccessMessage(""), 2500);
+
+      return true;
     } catch (error) {
       console.error(error);
       setErrorMessage("Network error while adding sighting");
       setTimeout(() => setErrorMessage(""), 2500);
       return false;
-
-      return true;
     } finally {
       setLoading(false);
     }
