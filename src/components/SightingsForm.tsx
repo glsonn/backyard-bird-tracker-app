@@ -7,6 +7,7 @@ type Props = {
   onAdd: (species: string, count: number, notes: string) => Promise<boolean>;
   loading: boolean;
   successMessage: string;
+  errorMessage: string;
 };
 
 export default function SightingsForm({
@@ -14,6 +15,7 @@ export default function SightingsForm({
   onAdd,
   loading,
   successMessage,
+  errorMessage,
 }: Props) {
   const [species, setSpecies] = useState(birds[0]);
   const [count, setCount] = useState(1);
@@ -141,6 +143,21 @@ export default function SightingsForm({
           }}
         >
           {successMessage}
+        </div>
+      )}
+
+      {errorMessage && (
+        <div
+          style={{
+            marginBottom: "0.5rem",
+            padding: "0.75rem 1rem",
+            borderRadius: "6px",
+            backgroundColor: "#fdecea",
+            color: "#b3261e",
+            border: "1px solid #f5c2c0",
+          }}
+        >
+          {errorMessage}
         </div>
       )}
     </div>

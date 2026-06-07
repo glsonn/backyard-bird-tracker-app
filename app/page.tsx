@@ -20,20 +20,30 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   async function fetchSightings(): Promise<void> {
     setIsFetching(true);
-    const { data, error } = await getSightings();
 
-    if (error) {
+    try {
+      const { data, error } = await getSightings();
+
+      if (error) {
+        console.error(error);
+        setErrorMessage("Error loading sightings");
+        setTimeout(() => setErrorMessage(""), 2500);
+        return;
+      }
+
+      setSightings(data ?? []);
+    } catch (error) {
       console.error(error);
+      setErrorMessage("Network error while loading sightings");
+      setTimeout(() => setErrorMessage(""), 2500);
+    } finally {
       setIsFetching(false);
-      return;
     }
-
-    setSightings(data || []);
-    setIsFetching(false);
   }
 
   useEffect(() => {
@@ -52,7 +62,8 @@ export default function Home() {
 
       if (error) {
         console.error(error);
-        alert("Error adding sighting");
+        setErrorMessage("Error adding sighting");
+        setTimeout(() => setErrorMessage(""), 2500);
         return false;
       }
 
@@ -62,6 +73,11 @@ export default function Home() {
 
       setSuccessMessage("Sighting added successfully!");
       setTimeout(() => setSuccessMessage(""), 2500);
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Network error while adding sighting");
+      setTimeout(() => setErrorMessage(""), 2500);
+      return false;
 
       return true;
     } finally {
@@ -105,6 +121,7 @@ export default function Home() {
         onAdd={addSighting}
         loading={loading}
         successMessage={successMessage}
+        errorMessage={errorMessage}
       />
 
       <h2>Recent Sightings</h2>
