@@ -7,6 +7,8 @@ import SightingsForm from "@/components/SightingsForm";
 import SightingsList from "@/components/SightingsList";
 import type { Sighting } from "@/types/sighting";
 
+type SortOrder = "newest" | "oldest";
+
 const birds = [
   "Northern Cardinal",
   "Blue Jay",
@@ -22,6 +24,7 @@ export default function Home() {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
 
   async function fetchSightings(): Promise<void> {
     setIsFetching(true);
@@ -49,6 +52,16 @@ export default function Home() {
   useEffect(() => {
     fetchSightings();
   }, []);
+
+  const displayedSightings = [...sightings].sort((a, b) => {
+    if (sortOrder === "oldest") {
+      return (
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      );
+    }
+
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
 
   async function addSighting(
     species: string,
@@ -124,10 +137,25 @@ export default function Home() {
         errorMessage={errorMessage}
       />
 
+      <div style={{ marginBottom: "1rem" }}>
+        <label htmlFor="sortOrder" style={{ marginRight: "0.5rem" }}>
+          Sort:
+        </label>
+
+        <select
+          id="sortOrder"
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value as SortOrder)}
+        >
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+        </select>
+      </div>
+
       <h2>Recent Sightings</h2>
 
       <SightingsList
-        sightings={sightings}
+        sightings={displayedSightings}
         isFetching={isFetching}
         deletingId={deletingId}
         onDelete={handleDelete}
