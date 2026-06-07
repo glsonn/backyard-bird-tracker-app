@@ -25,6 +25,7 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
+  const [speciesFilter, setSpeciesFilter] = useState<string>("");
 
   async function fetchSightings(): Promise<void> {
     setIsFetching(true);
@@ -53,15 +54,25 @@ export default function Home() {
     fetchSightings();
   }, []);
 
-  const displayedSightings = [...sightings].sort((a, b) => {
-    if (sortOrder === "oldest") {
-      return (
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-      );
-    }
+  const displayedSightings = sightings
+    .filter((sighting) => {
+      if (!speciesFilter) return true;
 
-    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-  });
+      return sighting.species
+        .toLowerCase()
+        .includes(speciesFilter.toLowerCase());
+    })
+    .sort((a, b) => {
+      if (sortOrder === "oldest") {
+        return (
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+      }
+
+      return (
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+    });
 
   async function addSighting(
     species: string,
@@ -138,6 +149,29 @@ export default function Home() {
       />
 
       <div style={{ marginBottom: "1rem" }}>
+        <label htmlFor="speciesFilter" style={{ marginRight: "0.5rem" }}>
+          Filter:
+        </label>
+
+        <input
+          id="speciesFilter"
+          type="text"
+          value={speciesFilter}
+          onChange={(e) => setSpeciesFilter(e.target.value)}
+          placeholder="Search species..."
+        />
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setSpeciesFilter("")}
+        disabled={!speciesFilter}
+        style={{ marginLeft: "0.5rem" }}
+      >
+        Clear
+      </button>
+
+      <div style={{ marginBottom: "1rem" }}>
         <label htmlFor="sortOrder" style={{ marginRight: "0.5rem" }}>
           Sort:
         </label>
@@ -152,6 +186,10 @@ export default function Home() {
         </select>
       </div>
 
+      {!isFetching && displayedSightings.length === 0 && (
+        <p style={{ marginTop: "1rem" }}>No sightings match your filter.</p>
+      )}
+
       <h2>Recent Sightings</h2>
 
       <SightingsList
@@ -159,6 +197,7 @@ export default function Home() {
         isFetching={isFetching}
         deletingId={deletingId}
         onDelete={handleDelete}
+        isFilterActive={speciesFilter !== ""}
       />
     </main>
   );

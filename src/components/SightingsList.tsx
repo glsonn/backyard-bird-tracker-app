@@ -7,6 +7,7 @@ type Props = {
   isFetching: boolean;
   deletingId: string | null;
   onDelete: (id: string) => void;
+  isFilterActive: boolean;
 };
 
 export default function SightingsList({
@@ -14,6 +15,7 @@ export default function SightingsList({
   isFetching,
   deletingId,
   onDelete,
+  isFilterActive,
 }: Props) {
   if (isFetching && sightings.length === 0) {
     return (
@@ -23,7 +25,7 @@ export default function SightingsList({
     );
   }
 
-  if (sightings.length === 0)
+  if (sightings.length === 0 && !isFilterActive) {
     return (
       <p
         style={{
@@ -38,6 +40,24 @@ export default function SightingsList({
         No sightings yet. Start by adding your first bird sighting above 🐦
       </p>
     );
+  }
+
+  if (sightings.length === 0 && isFilterActive) {
+    return (
+      <p
+        style={{
+          padding: "1rem",
+          border: "1px dashed #ccc",
+          borderRadius: "8px",
+          color: "#666",
+          textAlign: "center",
+          backgroundColor: "#fafafa",
+        }}
+      >
+        No sightings match your filter.
+      </p>
+    );
+  }
 
   const isRefreshing = isFetching && sightings.length > 0;
 
