@@ -58,9 +58,7 @@ export default function Home() {
     .filter((sighting) => {
       if (!speciesFilter) return true;
 
-      return sighting.species
-        .toLowerCase()
-        .includes(speciesFilter.toLowerCase());
+      return sighting.species === speciesFilter;
     })
     .sort((a, b) => {
       if (sortOrder === "oldest") {
@@ -73,6 +71,10 @@ export default function Home() {
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       );
     });
+
+  const speciesOptions = Array.from(
+    new Set(sightings.map((sighting) => sighting.species)),
+  ).sort();
 
   async function addSighting(
     species: string,
@@ -148,42 +150,78 @@ export default function Home() {
         errorMessage={errorMessage}
       />
 
-      <div style={{ marginBottom: "1rem" }}>
-        <label htmlFor="speciesFilter" style={{ marginRight: "0.5rem" }}>
-          Filter:
-        </label>
-
-        <input
-          id="speciesFilter"
-          type="text"
-          value={speciesFilter}
-          onChange={(e) => setSpeciesFilter(e.target.value)}
-          placeholder="Search species..."
-        />
-      </div>
-
-      <button
-        type="button"
-        onClick={() => setSpeciesFilter("")}
-        disabled={!speciesFilter}
-        style={{ marginLeft: "0.5rem" }}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "1rem",
+          flexWrap: "wrap",
+          padding: "1rem",
+          marginBottom: "1.5rem",
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+        }}
       >
-        Clear
-      </button>
+        <div>
+          <label htmlFor="speciesFilter" style={{ marginRight: "0.5rem" }}>
+            Bird:
+          </label>
 
-      <div style={{ marginBottom: "1rem" }}>
-        <label htmlFor="sortOrder" style={{ marginRight: "0.5rem" }}>
-          Sort:
-        </label>
+          <select
+            id="speciesFilter"
+            value={speciesFilter}
+            onChange={(e) => setSpeciesFilter(e.target.value)}
+            style={{
+              padding: "0.4rem",
+              border: "1px solid #ccc",
+              borderRadius: "6px",
+            }}
+          >
+            <option value="">All Birds</option>
 
-        <select
-          id="sortOrder"
-          value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value as SortOrder)}
+            {speciesOptions.map((bird) => (
+              <option key={bird} value={bird}>
+                {bird}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setSpeciesFilter("")}
+          disabled={!speciesFilter}
+          style={{
+            padding: "0.5rem 0.75rem",
+            border: "1px solid #ccc",
+            borderRadius: "6px",
+            backgroundColor: speciesFilter ? "#f3f4f6" : "#fafafa",
+            cursor: speciesFilter ? "pointer" : "not-allowed",
+            opacity: speciesFilter ? 1 : 0.6,
+          }}
         >
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-        </select>
+          Clear
+        </button>
+
+        <div>
+          <label htmlFor="sortOrder" style={{ marginRight: "0.5rem" }}>
+            Sort:
+          </label>
+
+          <select
+            id="sortOrder"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as SortOrder)}
+            style={{
+              padding: "0.4rem",
+              border: "1px solid #ccc",
+              borderRadius: "6px",
+            }}
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
       </div>
 
       {!isFetching && displayedSightings.length === 0 && (
