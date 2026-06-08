@@ -138,7 +138,15 @@ export default function Home() {
     }
   }
   return (
-    <main style={{ padding: "2rem", maxWidth: "700px", margin: "0 auto" }}>
+    <main
+      style={{
+        maxWidth: "700px",
+        margin: "0 auto",
+        padding: "2rem",
+        width: "100%",
+        boxSizing: "border-box",
+      }}
+    >
       <h1 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem" }}>
         Backyard Bird Tracker
       </h1>
@@ -193,12 +201,12 @@ export default function Home() {
           onClick={() => setSpeciesFilter("")}
           disabled={!speciesFilter}
           style={{
-            padding: "0.5rem 0.75rem",
-            border: "1px solid #ccc",
+            padding: "0.4rem 0.7rem",
             borderRadius: "6px",
-            backgroundColor: speciesFilter ? "#f3f4f6" : "#fafafa",
-            cursor: speciesFilter ? "pointer" : "not-allowed",
-            opacity: speciesFilter ? 1 : 0.6,
+            backgroundColor: "#dc2626",
+            color: "white",
+            border: "1px solid #b91c1c",
+            cursor: "pointer",
           }}
         >
           Clear

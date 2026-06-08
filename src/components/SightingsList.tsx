@@ -4,6 +4,17 @@ import { useState } from "react";
 import type { Sighting } from "@/types/sighting";
 import { updateSighting } from "@/lib/sightings";
 
+const buttonBase: React.CSSProperties = {
+  padding: "0.5rem 0.75rem",
+  borderRadius: "6px",
+  border: "none",
+  color: "white",
+  cursor: "pointer",
+  fontSize: "0.9rem",
+  lineHeight: 1,
+  minWidth: "70px",
+};
+
 type Props = {
   sightings: Sighting[];
   isFetching: boolean;
@@ -105,7 +116,7 @@ export default function SightingsList({
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "flex-start",
+                alignItems: "center",
                 gap: "1rem",
               }}
             >
@@ -272,7 +283,10 @@ export default function SightingsList({
                     notes: sighting.notes ?? "",
                   });
                 }}
-                className="rounded bg-blue-600 px-3 py-1 text-white"
+                style={{
+                  ...buttonBase,
+                  backgroundColor: "#2563eb",
+                }}
               >
                 Edit
               </button>
@@ -281,16 +295,12 @@ export default function SightingsList({
                 onClick={() => onDelete(sighting.id)}
                 disabled={deletingId === sighting.id}
                 style={{
-                  marginTop: "0.5rem",
-                  padding: "0.5rem 0.75rem",
-                  border: "none",
-                  borderRadius: "6px",
+                  ...buttonBase,
                   backgroundColor:
                     deletingId === sighting.id ? "#e57373" : "#d9534f",
-                  color: "white",
+                  opacity: deletingId === sighting.id ? 0.7 : 1,
                   cursor:
                     deletingId === sighting.id ? "not-allowed" : "pointer",
-                  opacity: deletingId === sighting.id ? 0.7 : 1,
                   transition: "all 0.2s ease",
                 }}
                 onMouseEnter={(e) => {
