@@ -112,14 +112,7 @@ export default function SightingsList({
               boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: "1rem",
-              }}
-            >
+            <div>
               <div
                 style={{
                   flex: 1,
@@ -271,49 +264,56 @@ export default function SightingsList({
                   </>
                 )}
               </div>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setEditingId(sighting.id);
-
-                  setDraftSighting({
-                    species: sighting.species,
-                    count: sighting.count,
-                    notes: sighting.notes ?? "",
-                  });
-                }}
+              <div
                 style={{
-                  ...buttonBase,
-                  backgroundColor: "#2563eb",
+                  display: "flex",
+                  gap: "0.5rem",
+                  marginTop: "1rem",
                 }}
               >
-                Edit
-              </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingId(sighting.id);
 
-              <button
-                onClick={() => onDelete(sighting.id)}
-                disabled={deletingId === sighting.id}
-                style={{
-                  ...buttonBase,
-                  backgroundColor:
-                    deletingId === sighting.id ? "#e57373" : "#d9534f",
-                  opacity: deletingId === sighting.id ? 0.7 : 1,
-                  cursor:
-                    deletingId === sighting.id ? "not-allowed" : "pointer",
-                  transition: "all 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  if (deletingId === sighting.id) return;
-                  e.currentTarget.style.backgroundColor = "#c9302c";
-                }}
-                onMouseLeave={(e) => {
-                  if (deletingId === sighting.id) return;
-                  e.currentTarget.style.backgroundColor = "#d9534f";
-                }}
-              >
-                {deletingId === sighting.id ? "Deleting…" : "Delete"}
-              </button>
+                    setDraftSighting({
+                      species: sighting.species,
+                      count: sighting.count,
+                      notes: sighting.notes ?? "",
+                    });
+                  }}
+                  style={{
+                    ...buttonBase,
+                    backgroundColor: "#2563eb",
+                  }}
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => onDelete(sighting.id)}
+                  disabled={deletingId === sighting.id}
+                  style={{
+                    ...buttonBase,
+                    backgroundColor:
+                      deletingId === sighting.id ? "#e57373" : "#d9534f",
+                    opacity: deletingId === sighting.id ? 0.7 : 1,
+                    cursor:
+                      deletingId === sighting.id ? "not-allowed" : "pointer",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (deletingId === sighting.id) return;
+                    e.currentTarget.style.backgroundColor = "#c9302c";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (deletingId === sighting.id) return;
+                    e.currentTarget.style.backgroundColor = "#d9534f";
+                  }}
+                >
+                  {deletingId === sighting.id ? "Deleting…" : "Delete"}
+                </button>
+              </div>
             </div>
           </li>
         ))}
