@@ -23,6 +23,7 @@ type Props = {
   isFilterActive: boolean;
   editingId: string | null;
   setEditingId: React.Dispatch<React.SetStateAction<string | null>>;
+  onUpdateSighting: (updatedSighting: Sighting) => void;
 };
 
 export default function SightingsList({
@@ -33,6 +34,7 @@ export default function SightingsList({
   isFilterActive,
   editingId,
   setEditingId,
+  onUpdateSighting,
 }: Props) {
   const [draftSighting, setDraftSighting] = useState<{
     species: string;
@@ -166,7 +168,7 @@ export default function SightingsList({
 
                     <div style={{ marginBottom: "0.5rem" }}>
                       <label>Notes</label>
-                      <input
+                      <textarea
                         value={draftSighting.notes}
                         onChange={(e) =>
                           setDraftSighting({
@@ -174,11 +176,14 @@ export default function SightingsList({
                             notes: e.target.value,
                           })
                         }
+                        rows={4}
                         style={{
                           display: "block",
                           width: "100%",
                           padding: "0.4rem",
                           marginTop: "0.25rem",
+                          boxSizing: "border-box",
+                          resize: "vertical",
                         }}
                       />
                     </div>
@@ -206,7 +211,7 @@ export default function SightingsList({
                       onClick={async () => {
                         if (!draftSighting || !editingId) return;
 
-                        const { error } = await updateSighting(
+                        const { data, error } = await updateSighting(
                           editingId,
                           draftSighting,
                         );
@@ -217,7 +222,12 @@ export default function SightingsList({
                           return;
                         }
 
-                        window.location.reload();
+                        if (data) {
+                          onUpdateSighting(data);
+                        }
+
+                        setEditingId(null);
+                        setDraftSighting(null);
                       }}
                       style={{
                         padding: "0.4rem 0.7rem",
@@ -271,48 +281,60 @@ export default function SightingsList({
                   marginTop: "1rem",
                 }}
               >
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEditingId(sighting.id);
+                {editingId !== sighting.id && (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "0.5rem",
+                      marginTop: "1rem",
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingId(sighting.id);
 
-                    setDraftSighting({
-                      species: sighting.species,
-                      count: sighting.count,
-                      notes: sighting.notes ?? "",
-                    });
-                  }}
-                  style={{
-                    ...buttonBase,
-                    backgroundColor: "#2563eb",
-                  }}
-                >
-                  Edit
-                </button>
+                        setDraftSighting({
+                          species: sighting.species,
+                          count: sighting.count,
+                          notes: sighting.notes ?? "",
+                        });
+                      }}
+                      style={{
+                        ...buttonBase,
+                        backgroundColor: "#2563eb",
+                      }}
+                    >
+                      Edit
+                    </button>
 
-                <button
-                  onClick={() => onDelete(sighting.id)}
-                  disabled={deletingId === sighting.id}
-                  style={{
-                    ...buttonBase,
-                    backgroundColor:
-                      deletingId === sighting.id ? "#e57373" : "#d9534f",
-                    opacity: deletingId === sighting.id ? 0.7 : 1,
-                    cursor:
-                      deletingId === sighting.id ? "not-allowed" : "pointer",
-                    transition: "all 0.2s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (deletingId === sighting.id) return;
-                    e.currentTarget.style.backgroundColor = "#c9302c";
-                  }}
-                  onMouseLeave={(e) => {
-                    if (deletingId === sighting.id) return;
-                    e.currentTarget.style.backgroundColor = "#d9534f";
-                  }}
-                >
-                  {deletingId === sighting.id ? "Deleting…" : "Delete"}
-                </button>
+                    <button
+                      onClick={() => onDelete(sighting.id)}
+                      disabled={deletingId === sighting.id}
+                      style={{
+                        ...buttonBase,
+                        backgroundColor:
+                          deletingId === sighting.id ? "#e57373" : "#d9534f",
+                        opacity: deletingId === sighting.id ? 0.7 : 1,
+                        cursor:
+                          deletingId === sighting.id
+                            ? "not-allowed"
+                            : "pointer",
+                        transition: "all 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (deletingId === sighting.id) return;
+                        e.currentTarget.style.backgroundColor = "#c9302c";
+                      }}
+                      onMouseLeave={(e) => {
+                        if (deletingId === sighting.id) return;
+                        e.currentTarget.style.backgroundColor = "#d9534f";
+                      }}
+                    >
+                      {deletingId === sighting.id ? "Deleting…" : "Delete"}
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </li>

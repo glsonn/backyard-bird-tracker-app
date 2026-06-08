@@ -137,6 +137,15 @@ export default function Home() {
       setDeletingId(null);
     }
   }
+
+  const handleUpdateSighting = (updatedSighting: Sighting) => {
+    setSightings((prev) =>
+      prev.map((sighting) =>
+        sighting.id === updatedSighting.id ? updatedSighting : sighting,
+      ),
+    );
+  };
+
   return (
     <main
       style={{
@@ -247,6 +256,7 @@ export default function Home() {
         isFilterActive={speciesFilter !== ""}
         editingId={editingId}
         setEditingId={setEditingId}
+        onUpdateSighting={handleUpdateSighting}
       />
     </main>
   );
