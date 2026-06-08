@@ -26,6 +26,7 @@ export default function Home() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
   const [speciesFilter, setSpeciesFilter] = useState<string>("");
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   async function fetchSightings(): Promise<void> {
     setIsFetching(true);
@@ -236,6 +237,8 @@ export default function Home() {
         deletingId={deletingId}
         onDelete={handleDelete}
         isFilterActive={speciesFilter !== ""}
+        editingId={editingId}
+        setEditingId={setEditingId}
       />
     </main>
   );
