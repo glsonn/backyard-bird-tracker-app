@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import SpeciesSelect from "@/components/SpeciesSelect";
 
 type Props = {
   birds: string[];
@@ -40,28 +41,7 @@ export default function SightingsForm({
         marginBottom: "2rem",
       }}
     >
-      <div>
-        <label>Species</label>
-        <br />
-        <select
-          value={species}
-          onChange={(e) => setSpecies(e.target.value)}
-          style={{
-            padding: "0.5rem",
-            borderRadius: "6px",
-            border: "1px solid #ccc",
-            fontSize: "1rem",
-            width: "100%",
-            marginTop: "0.25rem",
-          }}
-        >
-          {birds.map((bird) => (
-            <option key={bird} value={bird}>
-              {bird}
-            </option>
-          ))}
-        </select>
-      </div>
+      <SpeciesSelect value={species} options={birds} onChange={setSpecies} />
 
       <div>
         <label>Count</label>

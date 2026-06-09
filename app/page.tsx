@@ -257,6 +257,7 @@ export default function Home() {
         editingId={editingId}
         setEditingId={setEditingId}
         onUpdateSighting={handleUpdateSighting}
+        birds={birds}
       />
     </main>
   );

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Sighting } from "@/types/sighting";
 import { updateSighting } from "@/lib/sightings";
+import SpeciesSelect from "@/components/SpeciesSelect";
 
 const buttonBase: React.CSSProperties = {
   padding: "0.5rem 0.75rem",
@@ -24,6 +25,7 @@ type Props = {
   editingId: string | null;
   setEditingId: React.Dispatch<React.SetStateAction<string | null>>;
   onUpdateSighting: (updatedSighting: Sighting) => void;
+  birds: string[];
 };
 
 export default function SightingsList({
@@ -35,6 +37,7 @@ export default function SightingsList({
   editingId,
   setEditingId,
   onUpdateSighting,
+  birds,
 }: Props) {
   const [draftSighting, setDraftSighting] = useState<{
     species: string;
@@ -127,24 +130,16 @@ export default function SightingsList({
                       Editing sighting...
                     </div>
 
-                    <div style={{ marginBottom: "0.5rem" }}>
-                      <label>Species</label>
-                      <input
-                        value={draftSighting.species}
-                        onChange={(e) =>
-                          setDraftSighting({
-                            ...draftSighting,
-                            species: e.target.value,
-                          })
-                        }
-                        style={{
-                          display: "block",
-                          width: "100%",
-                          padding: "0.4rem",
-                          marginTop: "0.25rem",
-                        }}
-                      />
-                    </div>
+                    <SpeciesSelect
+                      value={draftSighting.species}
+                      options={birds}
+                      onChange={(value) =>
+                        setDraftSighting({
+                          ...draftSighting,
+                          species: value,
+                        })
+                      }
+                    />
 
                     <div style={{ marginBottom: "0.5rem" }}>
                       <label>Count</label>
