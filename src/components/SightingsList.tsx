@@ -22,8 +22,6 @@ type Props = {
   deletingId: string | null;
   onDelete: (id: string) => void;
   isFilterActive: boolean;
-  editingId: string | null;
-  setEditingId: React.Dispatch<React.SetStateAction<string | null>>;
   onUpdateSighting: (
     id: string,
     draft: {
@@ -41,8 +39,6 @@ export default function SightingsList({
   deletingId,
   onDelete,
   isFilterActive,
-  editingId,
-  setEditingId,
   onUpdateSighting,
   birds,
 }: Props) {
@@ -51,6 +47,7 @@ export default function SightingsList({
     count: number;
     notes: string;
   } | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   if (isFetching && sightings.length === 0) {
     return (
       <p style={{ textAlign: "center", color: "#666", padding: "1rem" }}>
