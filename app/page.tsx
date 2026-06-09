@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from "react";
 
-import { getSightings, createSighting, deleteSighting } from "@/lib/sightings";
+import {
+  getSightings,
+  createSighting,
+  deleteSighting,
+  updateSighting,
+} from "@/lib/sightings";
 import SightingsForm from "@/components/SightingsForm";
 import SightingsList from "@/components/SightingsList";
 import type { Sighting } from "@/types/sighting";
@@ -138,13 +143,27 @@ export default function Home() {
     }
   }
 
-  const handleUpdateSighting = (updatedSighting: Sighting) => {
-    setSightings((prev) =>
-      prev.map((sighting) =>
-        sighting.id === updatedSighting.id ? updatedSighting : sighting,
-      ),
-    );
-  };
+  async function handleUpdateSighting(
+    id: string,
+    draft: {
+      species: string;
+      count: number;
+      notes: string;
+    },
+  ) {
+    const { data, error } = await updateSighting(id, draft);
+
+    if (error) {
+      console.error(error);
+      setErrorMessage("Error updating sighting");
+      setTimeout(() => setErrorMessage(""), 2500);
+      return;
+    }
+
+    if (data) {
+      setSightings((prev) => prev.map((s) => (s.id === data.id ? data : s)));
+    }
+  }
 
   return (
     <main

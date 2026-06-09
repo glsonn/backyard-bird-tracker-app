@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { Sighting } from "@/types/sighting";
-import { updateSighting } from "@/lib/sightings";
+// import { updateSighting } from "@/lib/sightings";
 import SpeciesSelect from "@/components/SpeciesSelect";
 
 const buttonBase: React.CSSProperties = {
@@ -24,7 +24,14 @@ type Props = {
   isFilterActive: boolean;
   editingId: string | null;
   setEditingId: React.Dispatch<React.SetStateAction<string | null>>;
-  onUpdateSighting: (updatedSighting: Sighting) => void;
+  onUpdateSighting: (
+    id: string,
+    draft: {
+      species: string;
+      count: number;
+      notes: string;
+    },
+  ) => Promise<void>;
   birds: string[];
 };
 
@@ -206,20 +213,7 @@ export default function SightingsList({
                       onClick={async () => {
                         if (!draftSighting || !editingId) return;
 
-                        const { data, error } = await updateSighting(
-                          editingId,
-                          draftSighting,
-                        );
-
-                        if (error) {
-                          console.error(error);
-                          alert("Error updating sighting");
-                          return;
-                        }
-
-                        if (data) {
-                          onUpdateSighting(data);
-                        }
+                        await onUpdateSighting(editingId, draftSighting);
 
                         setEditingId(null);
                         setDraftSighting(null);
