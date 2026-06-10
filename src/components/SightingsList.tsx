@@ -28,6 +28,7 @@ type Props = {
       species: string;
       count: number;
       notes: string;
+      date_seen: string;
     },
   ) => Promise<void>;
   birds: string[];
@@ -46,6 +47,7 @@ export default function SightingsList({
     species: string;
     count: number;
     notes: string;
+    date_seen: string;
   } | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   if (isFetching && sightings.length === 0) {
@@ -166,6 +168,27 @@ export default function SightingsList({
                     </div>
 
                     <div style={{ marginBottom: "0.5rem" }}>
+                      <label>Date Seen</label>
+                      <input
+                        type="date"
+                        value={draftSighting.date_seen}
+                        onChange={(e) =>
+                          setDraftSighting({
+                            ...draftSighting,
+                            date_seen: e.target.value,
+                          })
+                        }
+                        style={{
+                          display: "block",
+                          width: "100%",
+                          padding: "0.4rem",
+                          marginTop: "0.25rem",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ marginBottom: "0.5rem" }}>
                       <label>Notes</label>
                       <textarea
                         value={draftSighting.notes}
@@ -243,20 +266,15 @@ export default function SightingsList({
                       Count: {sighting.count}
                     </div>
 
+                    <div style={{ marginBottom: "0.25rem" }}>
+                      Seen: {new Date(sighting.date_seen).toLocaleDateString()}
+                    </div>
+
                     {sighting.notes && (
                       <div style={{ marginBottom: "0.25rem" }}>
                         Notes: {sighting.notes}
                       </div>
                     )}
-
-                    <small
-                      style={{
-                        display: "block",
-                        color: "#666",
-                      }}
-                    >
-                      {new Date(sighting.created_at).toLocaleString()}
-                    </small>
                   </>
                 )}
               </div>
@@ -284,6 +302,7 @@ export default function SightingsList({
                           species: sighting.species,
                           count: sighting.count,
                           notes: sighting.notes ?? "",
+                          date_seen: sighting.date_seen,
                         });
                       }}
                       style={{

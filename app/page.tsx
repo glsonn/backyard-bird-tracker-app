@@ -113,15 +113,25 @@ export default function Home() {
   const topVisitorsText =
     topVisitors.length > 0 ? topVisitors.join(", ") : "None";
 
+  const speciesSeenList = Array.from(
+    new Set(sightings.map((sighting) => sighting.species)),
+  ).sort();
+
   async function addSighting(
     species: string,
     count: number,
     notes: string,
+    date_seen: string,
   ): Promise<boolean> {
     setLoading(true);
 
     try {
-      const { data, error } = await createSighting(species, count, notes);
+      const { data, error } = await createSighting(
+        species,
+        count,
+        notes,
+        date_seen,
+      );
 
       if (error) {
         console.error(error);
@@ -180,6 +190,7 @@ export default function Home() {
       species: string;
       count: number;
       notes: string;
+      date_seen: string;
     },
   ) {
     const { data, error } = await updateSighting(id, draft);
@@ -218,80 +229,6 @@ export default function Home() {
         errorMessage={errorMessage}
       />
 
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "1rem",
-          flexWrap: "wrap",
-          padding: "1rem",
-          marginBottom: "1.5rem",
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-        }}
-      >
-        <div>
-          <label htmlFor="speciesFilter" style={{ marginRight: "0.5rem" }}>
-            Bird:
-          </label>
-
-          <select
-            id="speciesFilter"
-            value={speciesFilter}
-            onChange={(e) => setSpeciesFilter(e.target.value)}
-            style={{
-              padding: "0.4rem",
-              border: "1px solid #ccc",
-              borderRadius: "6px",
-            }}
-          >
-            <option value="">All Birds</option>
-
-            {speciesOptions.map((bird) => (
-              <option key={bird} value={bird}>
-                {bird}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setSpeciesFilter("")}
-          disabled={!speciesFilter}
-          style={{
-            padding: "0.4rem 0.7rem",
-            borderRadius: "6px",
-            backgroundColor: "#dc2626",
-            color: "white",
-            border: "1px solid #b91c1c",
-            cursor: "pointer",
-          }}
-        >
-          Clear
-        </button>
-
-        <div>
-          <label htmlFor="sortOrder" style={{ marginRight: "0.5rem" }}>
-            Sort:
-          </label>
-
-          <select
-            id="sortOrder"
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as SortOrder)}
-            style={{
-              padding: "0.4rem",
-              border: "1px solid #ccc",
-              borderRadius: "6px",
-            }}
-          >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-          </select>
-        </div>
-      </div>
-
       {!isFetching && displayedSightings.length === 0 && (
         <p style={{ marginTop: "1rem" }}>No sightings match your filter.</p>
       )}
@@ -303,6 +240,7 @@ export default function Home() {
           padding: "1rem",
           marginBottom: "1.5rem",
           backgroundColor: "#f8fafc",
+          color: "#222",
           boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
         }}
       >
@@ -411,8 +349,130 @@ export default function Home() {
         </div>
       </div>
 
-      <h2>Recent Sightings</h2>
+      <div
+        style={{
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+          padding: "1rem",
+          marginBottom: "1.5rem",
+          backgroundColor: "#fff",
+          color: "#222",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+        }}
+      >
+        <h2
+          style={{
+            marginTop: 0,
+            marginBottom: "1rem",
+            fontSize: "1.1rem",
+            color: "#1e3a8a",
+          }}
+        >
+          Species Seen ({speciesSeenList.length})
+        </h2>
 
+        <ul
+          style={{
+            margin: 0,
+            paddingLeft: "1.25rem",
+          }}
+        >
+          {speciesSeenList.map((species) => (
+            <div
+              key={species}
+              style={{
+                marginBottom: "0.35rem",
+              }}
+            >
+              ✓ {species}
+            </div>
+          ))}
+        </ul>
+      </div>
+
+      <h2>Recent Sightings</h2>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "1rem",
+          flexWrap: "wrap",
+          padding: "1rem",
+          marginBottom: "1.5rem",
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+        }}
+      >
+        <strong
+          style={{
+            width: "100%",
+            display: "block",
+            marginBottom: "0.5rem",
+          }}
+        >
+          List Controls
+        </strong>
+        <div>
+          <label htmlFor="speciesFilter" style={{ marginRight: "0.5rem" }}>
+            Bird:
+          </label>
+
+          <select
+            id="speciesFilter"
+            value={speciesFilter}
+            onChange={(e) => setSpeciesFilter(e.target.value)}
+            style={{
+              padding: "0.4rem",
+              border: "1px solid #ccc",
+              borderRadius: "6px",
+            }}
+          >
+            <option value="">All Birds</option>
+
+            {speciesOptions.map((bird) => (
+              <option key={bird} value={bird}>
+                {bird}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setSpeciesFilter("")}
+          disabled={!speciesFilter}
+          style={{
+            padding: "0.4rem 0.7rem",
+            borderRadius: "6px",
+            backgroundColor: "#dc2626",
+            color: "white",
+            border: "1px solid #b91c1c",
+            cursor: "pointer",
+          }}
+        >
+          Clear
+        </button>
+
+        <div>
+          <label htmlFor="sortOrder" style={{ marginRight: "0.5rem" }}>
+            Sort:
+          </label>
+
+          <select
+            id="sortOrder"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as SortOrder)}
+            style={{
+              padding: "0.4rem",
+              border: "1px solid #ccc",
+              borderRadius: "6px",
+            }}
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
+      </div>
       <SightingsList
         sightings={displayedSightings}
         isFetching={isFetching}

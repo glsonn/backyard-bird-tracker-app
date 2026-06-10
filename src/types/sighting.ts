@@ -4,4 +4,5 @@ export type Sighting = {
   count: number;
   notes: string | null;
   created_at: string;
+  date_seen: string;
 };

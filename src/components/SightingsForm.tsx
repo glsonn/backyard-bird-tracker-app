@@ -5,7 +5,12 @@ import SpeciesSelect from "@/components/SpeciesSelect";
 
 type Props = {
   birds: string[];
-  onAdd: (species: string, count: number, notes: string) => Promise<boolean>;
+  onAdd: (
+    species: string,
+    count: number,
+    notes: string,
+    date_seen: string,
+  ) => Promise<boolean>;
   loading: boolean;
   successMessage: string;
   errorMessage: string;
@@ -21,14 +26,18 @@ export default function SightingsForm({
   const [species, setSpecies] = useState(birds[0]);
   const [count, setCount] = useState(1);
   const [notes, setNotes] = useState("");
+  const [date_seen, setDateSeen] = useState(
+    new Date().toISOString().split("T")[0],
+  );
 
   async function handleSubmit() {
-    const success = await onAdd(species, count, notes);
+    const success = await onAdd(species, count, notes, date_seen);
 
     if (success) {
       setSpecies(birds[0]);
       setCount(1);
       setNotes("");
+      setDateSeen(new Date().toISOString().split("T")[0]);
     }
   }
 
@@ -51,6 +60,25 @@ export default function SightingsForm({
           min="1"
           value={count}
           onChange={(e) => setCount(Number(e.target.value))}
+          style={{
+            padding: "0.5rem",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            fontSize: "1rem",
+            width: "100%",
+            marginTop: "0.25rem",
+            boxSizing: "border-box",
+          }}
+        />
+      </div>
+
+      <div>
+        <label>Date Seen</label>
+        <br />
+        <input
+          type="date"
+          value={date_seen}
+          onChange={(e) => setDateSeen(e.target.value)}
           style={{
             padding: "0.5rem",
             borderRadius: "6px",
