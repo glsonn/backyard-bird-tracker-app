@@ -81,6 +81,38 @@ export default function Home() {
     new Set(sightings.map((sighting) => sighting.species)),
   ).sort();
 
+  const totalSightings = sightings.length;
+
+  const speciesSeen = new Set(sightings.map((sighting) => sighting.species))
+    .size;
+
+  const totalBirdsCounted = sightings.reduce(
+    (sum, sighting) => sum + sighting.count,
+    0,
+  );
+
+  const sightingCountsBySpecies = sightings.reduce(
+    (acc, sighting) => {
+      acc[sighting.species] = (acc[sighting.species] || 0) + 1;
+
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
+
+  const highestSightingCount = Math.max(
+    0,
+    ...Object.values(sightingCountsBySpecies),
+  );
+
+  const topVisitors = Object.entries(sightingCountsBySpecies)
+    .filter(([, count]) => count === highestSightingCount)
+    .map(([species]) => species)
+    .sort();
+
+  const topVisitorsText =
+    topVisitors.length > 0 ? topVisitors.join(", ") : "None";
+
   async function addSighting(
     species: string,
     count: number,
@@ -263,6 +295,121 @@ export default function Home() {
       {!isFetching && displayedSightings.length === 0 && (
         <p style={{ marginTop: "1rem" }}>No sightings match your filter.</p>
       )}
+
+      <div
+        style={{
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+          padding: "1rem",
+          marginBottom: "1.5rem",
+          backgroundColor: "#f8fafc",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+        }}
+      >
+        <h2
+          style={{
+            marginTop: 0,
+            marginBottom: "1rem",
+            fontSize: "1.1rem",
+            color: "#1e3a8a",
+          }}
+        >
+          Yard Stats
+        </h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: "0.75rem",
+          }}
+        >
+          <div>
+            <div
+              style={{
+                fontSize: "0.85rem",
+                color: "#666",
+              }}
+            >
+              Total Sightings
+            </div>
+
+            <div
+              style={{
+                fontSize: "1.4rem",
+                fontWeight: 700,
+              }}
+            >
+              {totalSightings}
+            </div>
+          </div>
+
+          <div>
+            <div
+              style={{
+                fontSize: "0.85rem",
+                color: "#666",
+              }}
+            >
+              Species Seen
+            </div>
+
+            <div
+              style={{
+                fontSize: "1.4rem",
+                fontWeight: 700,
+              }}
+            >
+              {speciesSeen}
+            </div>
+          </div>
+
+          <div>
+            <div
+              style={{
+                fontSize: "0.85rem",
+                color: "#666",
+              }}
+            >
+              Birds Counted
+            </div>
+
+            <div
+              style={{
+                fontSize: "1.4rem",
+                fontWeight: 700,
+              }}
+            >
+              {totalBirdsCounted}
+            </div>
+          </div>
+        </div>
+        <div
+          style={{
+            marginTop: "1rem",
+            paddingTop: "1rem",
+            borderTop: "1px solid #ddd",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "0.85rem",
+              color: "#666",
+              marginBottom: "0.25rem",
+            }}
+          >
+            Top Visitors
+          </div>
+
+          <div
+            style={{
+              fontSize: "1rem",
+              fontWeight: 600,
+            }}
+          >
+            {topVisitorsText}
+          </div>
+        </div>
+      </div>
 
       <h2>Recent Sightings</h2>
 
