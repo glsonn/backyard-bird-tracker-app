@@ -11,6 +11,7 @@ import {
 import SightingsForm from "@/components/SightingsForm";
 import SightingsList from "@/components/SightingsList";
 import type { Sighting } from "@/types/sighting";
+import SeasonalTracking from "@/components/SeasonalTracking";
 
 type SortOrder = "newest" | "oldest";
 
@@ -116,6 +117,30 @@ export default function Home() {
   const speciesSeenList = Array.from(
     new Set(sightings.map((sighting) => sighting.species)),
   ).sort();
+
+  const seasonalSpeciesData = speciesSeenList.map((species) => {
+    const speciesSightings = sightings.filter(
+      (sighting) => sighting.species === species,
+    );
+
+    const sortedDates = speciesSightings
+      .map((sighting) => sighting.date_seen)
+      .sort();
+
+    const firstSeen = sortedDates[0];
+    const lastSeen = sortedDates[sortedDates.length - 1];
+
+    const daysSinceSeen = Math.floor(
+      (Date.now() - new Date(lastSeen).getTime()) / (1000 * 60 * 60 * 24),
+    );
+
+    return {
+      species,
+      firstSeen,
+      lastSeen,
+      daysSinceSeen,
+    };
+  });
 
   async function addSighting(
     species: string,
@@ -389,6 +414,8 @@ export default function Home() {
           ))}
         </ul>
       </div>
+
+      <SeasonalTracking speciesData={seasonalSpeciesData} />
 
       <h2>Recent Sightings</h2>
       <div
