@@ -314,7 +314,10 @@ export default function SightingsList({
                     </button>
 
                     <button
-                      onClick={() => onDelete(sighting.id)}
+                      onClick={() => {
+                        alert("Delete button clicked");
+                        onDelete(sighting.id);
+                      }}
                       disabled={deletingId === sighting.id}
                       style={{
                         ...buttonBase,
@@ -326,14 +329,6 @@ export default function SightingsList({
                             ? "not-allowed"
                             : "pointer",
                         transition: "all 0.2s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        if (deletingId === sighting.id) return;
-                        e.currentTarget.style.backgroundColor = "#c9302c";
-                      }}
-                      onMouseLeave={(e) => {
-                        if (deletingId === sighting.id) return;
-                        e.currentTarget.style.backgroundColor = "#d9534f";
                       }}
                     >
                       {deletingId === sighting.id ? "Deleting…" : "Delete"}
