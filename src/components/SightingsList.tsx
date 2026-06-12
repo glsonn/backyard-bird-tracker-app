@@ -288,6 +288,24 @@ export default function SightingsList({
                   }}
                 >
                   <button
+                    onClick={() => {
+                      alert("Delete button clicked");
+                      onDelete(sighting.id);
+                    }}
+                    disabled={deletingId === sighting.id}
+                    style={{
+                      ...buttonBase,
+                      backgroundColor:
+                        deletingId === sighting.id ? "#e57373" : "#d9534f",
+                      opacity: deletingId === sighting.id ? 0.7 : 1,
+                      cursor:
+                        deletingId === sighting.id ? "not-allowed" : "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    {deletingId === sighting.id ? "Deleting…" : "Delete"}
+                  </button>
+                  <button
                     type="button"
                     onClick={() => {
                       setEditingId(sighting.id);
@@ -305,25 +323,6 @@ export default function SightingsList({
                     }}
                   >
                     Edit
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      alert("Delete button clicked");
-                      onDelete(sighting.id);
-                    }}
-                    disabled={deletingId === sighting.id}
-                    style={{
-                      ...buttonBase,
-                      backgroundColor:
-                        deletingId === sighting.id ? "#e57373" : "#d9534f",
-                      opacity: deletingId === sighting.id ? 0.7 : 1,
-                      cursor:
-                        deletingId === sighting.id ? "not-allowed" : "pointer",
-                      transition: "all 0.2s ease",
-                    }}
-                  >
-                    {deletingId === sighting.id ? "Deleting…" : "Delete"}
                   </button>
                 </div>
               )}
