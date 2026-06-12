@@ -278,64 +278,55 @@ export default function SightingsList({
                   </>
                 )}
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "0.5rem",
-                  marginTop: "1rem",
-                }}
-              >
-                {editingId !== sighting.id && (
-                  <div
+
+              {editingId !== sighting.id && (
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "0.5rem",
+                    marginTop: "1rem",
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingId(sighting.id);
+
+                      setDraftSighting({
+                        species: sighting.species,
+                        count: sighting.count,
+                        notes: sighting.notes ?? "",
+                        date_seen: sighting.date_seen,
+                      });
+                    }}
                     style={{
-                      display: "flex",
-                      gap: "0.5rem",
-                      marginTop: "1rem",
+                      ...buttonBase,
+                      backgroundColor: "#2563eb",
                     }}
                   >
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setEditingId(sighting.id);
+                    Edit
+                  </button>
 
-                        setDraftSighting({
-                          species: sighting.species,
-                          count: sighting.count,
-                          notes: sighting.notes ?? "",
-                          date_seen: sighting.date_seen,
-                        });
-                      }}
-                      style={{
-                        ...buttonBase,
-                        backgroundColor: "#2563eb",
-                      }}
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        alert("Delete button clicked");
-                        onDelete(sighting.id);
-                      }}
-                      disabled={deletingId === sighting.id}
-                      style={{
-                        ...buttonBase,
-                        backgroundColor:
-                          deletingId === sighting.id ? "#e57373" : "#d9534f",
-                        opacity: deletingId === sighting.id ? 0.7 : 1,
-                        cursor:
-                          deletingId === sighting.id
-                            ? "not-allowed"
-                            : "pointer",
-                        transition: "all 0.2s ease",
-                      }}
-                    >
-                      {deletingId === sighting.id ? "Deleting…" : "Delete"}
-                    </button>
-                  </div>
-                )}
-              </div>
+                  <button
+                    onClick={() => {
+                      alert("Delete button clicked");
+                      onDelete(sighting.id);
+                    }}
+                    disabled={deletingId === sighting.id}
+                    style={{
+                      ...buttonBase,
+                      backgroundColor:
+                        deletingId === sighting.id ? "#e57373" : "#d9534f",
+                      opacity: deletingId === sighting.id ? 0.7 : 1,
+                      cursor:
+                        deletingId === sighting.id ? "not-allowed" : "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    {deletingId === sighting.id ? "Deleting…" : "Delete"}
+                  </button>
+                </div>
+              )}
             </div>
           </li>
         ))}
