@@ -317,15 +317,6 @@ export default function SightingsList({
                       opacity: deletingId === sighting.id ? 0.7 : 1,
                       cursor:
                         deletingId === sighting.id ? "not-allowed" : "pointer",
-                      transition: "all 0.2s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (deletingId === sighting.id) return;
-                      e.currentTarget.style.backgroundColor = "#c9302c";
-                    }}
-                    onMouseLeave={(e) => {
-                      if (deletingId === sighting.id) return;
-                      e.currentTarget.style.backgroundColor = "#d9534f";
                     }}
                   >
                     {deletingId === sighting.id ? "Deleting…" : "Delete"}
