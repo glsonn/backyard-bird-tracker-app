@@ -16,11 +16,28 @@ import SeasonalTracking from "@/components/SeasonalTracking";
 type SortOrder = "newest" | "oldest";
 
 const birds = [
-  "Northern Cardinal",
-  "Blue Jay",
-  "Black-capped Chickadee",
+  "American Crow",
   "American Goldfinch",
+  "American Robin",
+  "Black-capped Chickadee",
+  "Blue Jay",
+  "Brown-headed Cowbird",
+  "Canada Goose",
+  "Common Grackle",
+  "Dark-eyed Junco",
   "Downy Woodpecker",
+  "European Starling",
+  "House Finch",
+  "House Sparrow",
+  "Mallard",
+  "Mourning Dove",
+  "Northern Cardinal",
+  "Northern Flicker",
+  "Red-tailed Hawk",
+  "Red-winged Blackbird",
+  "Ruby-throated Hummingbird",
+  "Sandhill Crane",
+  "Wild Turkey",
 ];
 
 export default function Home() {
