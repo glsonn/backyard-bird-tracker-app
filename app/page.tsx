@@ -439,9 +439,22 @@ export default function Home() {
         >
           List Controls
         </strong>
-        <div>
-          <label htmlFor="speciesFilter" style={{ marginRight: "0.5rem" }}>
-            Bird:
+        <div
+          style={{
+            flex: "1 1 200px",
+            minWidth: 0,
+          }}
+        >
+          <label
+            htmlFor="speciesFilter"
+            style={{
+              display: "block",
+              marginBottom: "0.25rem",
+              fontSize: "0.9rem",
+              fontWeight: 500,
+            }}
+          >
+            Bird
           </label>
 
           <select
@@ -449,6 +462,9 @@ export default function Home() {
             value={speciesFilter}
             onChange={(e) => setSpeciesFilter(e.target.value)}
             style={{
+              width: "100%",
+              maxWidth: "100%",
+              boxSizing: "border-box",
               padding: "0.4rem",
               border: "1px solid #ccc",
               borderRadius: "6px",
@@ -471,18 +487,32 @@ export default function Home() {
           style={{
             padding: "0.4rem 0.7rem",
             borderRadius: "6px",
-            backgroundColor: "#dc2626",
+            backgroundColor: !speciesFilter ? "#d1d5db" : "#dc2626",
             color: "white",
             border: "1px solid #b91c1c",
-            cursor: "pointer",
+            cursor: !speciesFilter ? "not-allowed" : "pointer",
+            opacity: !speciesFilter ? 0.7 : 1,
           }}
         >
           Clear
         </button>
 
-        <div>
-          <label htmlFor="sortOrder" style={{ marginRight: "0.5rem" }}>
-            Sort:
+        <div
+          style={{
+            flex: "1 1 200px",
+            minWidth: 0,
+          }}
+        >
+          <label
+            htmlFor="sortOrder"
+            style={{
+              display: "block",
+              marginBottom: "0.25rem",
+              fontSize: "0.9rem",
+              fontWeight: 500,
+            }}
+          >
+            Sort
           </label>
 
           <select
@@ -490,6 +520,9 @@ export default function Home() {
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value as SortOrder)}
             style={{
+              width: "100%",
+              maxWidth: "100%",
+              boxSizing: "border-box",
               padding: "0.4rem",
               border: "1px solid #ccc",
               borderRadius: "6px",
