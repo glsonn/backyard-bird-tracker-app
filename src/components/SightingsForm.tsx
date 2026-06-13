@@ -60,6 +60,7 @@ export default function SightingsForm({
           min="1"
           value={count}
           onChange={(e) => setCount(Number(e.target.value))}
+          onFocus={(e) => e.target.select()}
           style={{
             padding: "0.5rem",
             borderRadius: "6px",
