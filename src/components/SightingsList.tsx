@@ -158,6 +158,7 @@ export default function SightingsList({
                             count: Number(e.target.value),
                           })
                         }
+                        onFocus={(e) => e.target.select()}
                         style={{
                           display: "block",
                           width: "100%",
