@@ -111,35 +111,6 @@ export default function SightingsForm({
         />
       </div>
 
-      <button
-        onClick={handleSubmit}
-        disabled={loading}
-        style={{
-          marginTop: "1rem",
-          padding: "0.6rem 1rem",
-          border: "none",
-          borderRadius: "6px",
-          backgroundColor: loading ? "#999" : "#2e7d32",
-          color: "white",
-          cursor: loading ? "not-allowed" : "pointer",
-          fontSize: "1rem",
-          width: "100%",
-          transition: "background-color 0.2s ease",
-        }}
-        onMouseEnter={(e) => {
-          if (!loading) {
-            e.currentTarget.style.backgroundColor = "#256628";
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (!loading) {
-            e.currentTarget.style.backgroundColor = "#2e7d32";
-          }
-        }}
-      >
-        {loading ? "Adding..." : "Add Sighting"}
-      </button>
-
       {successMessage && (
         <div
           style={{
@@ -169,6 +140,35 @@ export default function SightingsForm({
           {errorMessage}
         </div>
       )}
+
+      <button
+        onClick={handleSubmit}
+        disabled={loading}
+        style={{
+          marginTop: "1rem",
+          padding: "0.6rem 1rem",
+          border: "none",
+          borderRadius: "6px",
+          backgroundColor: loading ? "#999" : "#2e7d32",
+          color: "white",
+          cursor: loading ? "not-allowed" : "pointer",
+          fontSize: "1rem",
+          width: "100%",
+          transition: "background-color 0.2s ease",
+        }}
+        onMouseEnter={(e) => {
+          if (!loading) {
+            e.currentTarget.style.backgroundColor = "#256628";
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!loading) {
+            e.currentTarget.style.backgroundColor = "#2e7d32";
+          }
+        }}
+      >
+        {loading ? "Adding..." : "Add Sighting"}
+      </button>
     </div>
   );
 }
