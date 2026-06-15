@@ -86,13 +86,11 @@ export default function Home() {
     .sort((a, b) => {
       if (sortOrder === "oldest") {
         return (
-          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+          new Date(a.date_seen).getTime() - new Date(b.date_seen).getTime()
         );
       }
 
-      return (
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
+      return new Date(b.date_seen).getTime() - new Date(a.date_seen).getTime();
     });
 
   const speciesOptions = Array.from(
