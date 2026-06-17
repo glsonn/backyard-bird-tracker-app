@@ -1,3 +1,5 @@
+import { formatDate } from "@/lib/dateUtils";
+
 type SeasonalSpecies = {
   species: string;
   firstSeen: string;
@@ -49,14 +51,9 @@ export default function SeasonalTracking({
         >
           <div style={{ fontWeight: 600 }}>{species.species}</div>
 
-          <div>
-            First Seen:{" "}
-            {new Date(species.firstSeen).toLocaleDateString("en-US")}
-          </div>
+          <div>First Seen: {formatDate(species.firstSeen)}</div>
 
-          <div>
-            Last Seen: {new Date(species.lastSeen).toLocaleDateString("en-US")}
-          </div>
+          <div>Last Seen: {formatDate(species.lastSeen)}</div>
 
           <div>
             {species.daysSinceSeen === 0

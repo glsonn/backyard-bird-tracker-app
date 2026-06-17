@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Sighting } from "@/types/sighting";
 // import { updateSighting } from "@/lib/sightings";
 import SpeciesSelect from "@/components/SpeciesSelect";
+import { formatDate } from "@/lib/dateUtils";
 
 const buttonBase: React.CSSProperties = {
   padding: "0.5rem 0.75rem",
@@ -268,7 +269,7 @@ export default function SightingsList({
                     </div>
 
                     <div style={{ marginBottom: "0.25rem" }}>
-                      Seen: {new Date(sighting.date_seen).toLocaleDateString()}
+                      Seen: {formatDate(sighting.date_seen)}
                     </div>
 
                     {sighting.notes && (
