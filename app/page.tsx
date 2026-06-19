@@ -12,6 +12,7 @@ import SightingsForm from "@/components/SightingsForm";
 import SightingsList from "@/components/SightingsList";
 import type { Sighting } from "@/types/sighting";
 import SeasonalTracking from "@/components/SeasonalTracking";
+import { formatDate } from "@/lib/dateUtils";
 
 type SortOrder = "newest" | "oldest";
 
@@ -132,6 +133,26 @@ export default function Home() {
   const speciesSeenList = Array.from(
     new Set(sightings.map((sighting) => sighting.species)),
   ).sort();
+
+  const speciesSummary = Array.from(
+    new Set(sightings.map((sighting) => sighting.species)),
+  )
+    .map((species) => {
+      const speciesSightings = sightings.filter(
+        (sighting) => sighting.species === species,
+      );
+
+      const sortedDates = speciesSightings
+        .map((sighting) => sighting.date_seen)
+        .sort();
+
+      return {
+        species,
+        sightingsCount: speciesSightings.length,
+        lastSeen: sortedDates[sortedDates.length - 1],
+      };
+    })
+    .sort((a, b) => b.sightingsCount - a.sightingsCount);
 
   const seasonalSpeciesData = speciesSeenList.map((species) => {
     const speciesSightings = sightings.filter(
@@ -417,14 +438,30 @@ export default function Home() {
             paddingLeft: "1.25rem",
           }}
         >
-          {speciesSeenList.map((species) => (
+          {speciesSummary.map((bird) => (
             <div
-              key={species}
+              key={bird.species}
               style={{
-                marginBottom: "0.35rem",
+                marginBottom: "0.75rem",
               }}
             >
-              ✓ {species}
+              <div
+                style={{
+                  fontWeight: 600,
+                }}
+              >
+                {bird.species}
+              </div>
+
+              <div
+                style={{
+                  fontSize: "0.9rem",
+                  color: "#666",
+                }}
+              >
+                {bird.sightingsCount} sightings • Last seen{" "}
+                {formatDate(bird.lastSeen)}
+              </div>
             </div>
           ))}
         </ul>
