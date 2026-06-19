@@ -459,7 +459,9 @@ export default function Home() {
                   color: "#666",
                 }}
               >
-                {bird.sightingsCount} sightings • Last seen{" "}
+                {bird.sightingsCount}{" "}
+                {bird.sightingsCount === 1 ? "sighting" : "sightings"}
+                {" • Last seen "}
                 {formatDate(bird.lastSeen)}
               </div>
             </div>
