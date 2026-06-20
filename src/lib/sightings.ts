@@ -11,6 +11,7 @@ export async function createSighting(
   species: string,
   count: number,
   notes: string,
+  location: string,
   date_seen: string,
 ) {
   return await supabase
@@ -20,6 +21,7 @@ export async function createSighting(
         species,
         count,
         notes: notes || null,
+        location: location || null,
         date_seen,
       },
     ])
@@ -37,6 +39,7 @@ export async function updateSighting(
     species: string;
     count: number;
     notes: string;
+    location: string;
     date_seen: string;
   },
 ) {
@@ -45,7 +48,8 @@ export async function updateSighting(
     .update({
       species: updates.species,
       count: updates.count,
-      notes: updates.notes,
+      notes: updates.notes || null,
+      location: updates.location || null,
       date_seen: updates.date_seen,
     })
     .eq("id", id)

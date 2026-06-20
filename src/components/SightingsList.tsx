@@ -29,6 +29,7 @@ type Props = {
       species: string;
       count: number;
       notes: string;
+      location: string;
       date_seen: string;
     },
   ) => Promise<void>;
@@ -48,6 +49,7 @@ export default function SightingsList({
     species: string;
     count: number;
     notes: string;
+    location: string;
     date_seen: string;
   } | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -191,7 +193,29 @@ export default function SightingsList({
                     </div>
 
                     <div style={{ marginBottom: "0.5rem" }}>
-                      <label>Notes</label>
+                      <label>Location (optional)</label>
+                      <input
+                        type="text"
+                        value={draftSighting.location}
+                        onChange={(e) =>
+                          setDraftSighting({
+                            ...draftSighting,
+                            location: e.target.value,
+                          })
+                        }
+                        placeholder="Backyard, State Park, Walking home..."
+                        style={{
+                          display: "block",
+                          width: "100%",
+                          padding: "0.4rem",
+                          marginTop: "0.25rem",
+                          boxSizing: "border-box",
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ marginBottom: "0.5rem" }}>
+                      <label>Notes (optional)</label>
                       <textarea
                         value={draftSighting.notes}
                         onChange={(e) =>
@@ -272,6 +296,12 @@ export default function SightingsList({
                       Seen: {formatDate(sighting.date_seen)}
                     </div>
 
+                    {sighting.location && (
+                      <div style={{ marginBottom: "0.25rem" }}>
+                        Location: {sighting.location}
+                      </div>
+                    )}
+
                     {sighting.notes && (
                       <div style={{ marginBottom: "0.25rem" }}>
                         Notes: {sighting.notes}
@@ -298,6 +328,7 @@ export default function SightingsList({
                         species: sighting.species,
                         count: sighting.count,
                         notes: sighting.notes ?? "",
+                        location: sighting.location ?? "",
                         date_seen: sighting.date_seen,
                       });
                     }}

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import SpeciesSelect from "@/components/SpeciesSelect";
+import { getTodayDateString } from "@/lib/dateUtils";
 
 type Props = {
   birds: string[];
@@ -9,6 +10,7 @@ type Props = {
     species: string,
     count: number,
     notes: string,
+    location: string,
     date_seen: string,
   ) => Promise<boolean>;
   loading: boolean;
@@ -26,18 +28,18 @@ export default function SightingsForm({
   const [species, setSpecies] = useState(birds[0]);
   const [count, setCount] = useState(1);
   const [notes, setNotes] = useState("");
-  const [date_seen, setDateSeen] = useState(
-    new Date().toISOString().split("T")[0],
-  );
+  const [location, setLocation] = useState("");
+  const [date_seen, setDateSeen] = useState(getTodayDateString());
 
   async function handleSubmit() {
-    const success = await onAdd(species, count, notes, date_seen);
+    const success = await onAdd(species, count, notes, location, date_seen);
 
     if (success) {
       setSpecies(birds[0]);
       setCount(1);
       setNotes("");
-      setDateSeen(new Date().toISOString().split("T")[0]);
+      setLocation("");
+      setDateSeen(getTodayDateString());
     }
   }
 
@@ -93,7 +95,27 @@ export default function SightingsForm({
       </div>
 
       <div>
-        <label>Notes</label>
+        <label>Location (optional)</label>
+        <br />
+        <input
+          type="text"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          placeholder="Backyard, Fox River Park, Retzer Nature Center..."
+          style={{
+            padding: "0.5rem",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            fontSize: "1rem",
+            width: "100%",
+            marginTop: "0.25rem",
+            boxSizing: "border-box",
+          }}
+        />
+      </div>
+
+      <div>
+        <label>Notes (optional)</label>
         <br />
         <textarea
           rows={4}

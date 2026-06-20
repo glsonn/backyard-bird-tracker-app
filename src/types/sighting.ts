@@ -3,6 +3,7 @@ export type Sighting = {
   species: string;
   count: number;
   notes: string | null;
+  location: string | null;
   created_at: string;
   date_seen: string;
 };
