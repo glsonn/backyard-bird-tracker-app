@@ -39,6 +39,7 @@ const birds = [
   "Red-winged Blackbird",
   "Ruby-throated Hummingbird",
   "Sandhill Crane",
+  "White-breasted Nuthatch",
   "Wild Turkey",
 ];
 
