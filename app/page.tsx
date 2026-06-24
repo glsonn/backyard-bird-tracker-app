@@ -35,6 +35,7 @@ const birds = [
   "Mourning Dove",
   "Northern Cardinal",
   "Northern Flicker",
+  "Red-bellied Woodpecker",
   "Red-tailed Hawk",
   "Red-winged Blackbird",
   "Ruby-throated Hummingbird",
