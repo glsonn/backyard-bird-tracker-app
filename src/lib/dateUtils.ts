@@ -13,3 +13,12 @@ export function getTodayDateString(): string {
 export function parseLocalDate(dateString: string): Date {
   return new Date(`${dateString}T12:00:00`);
 }
+
+export function daysSince(dateString: string): number {
+  const today = parseLocalDate(getTodayDateString());
+  const target = parseLocalDate(dateString);
+
+  return Math.floor(
+    (today.getTime() - target.getTime()) / (1000 * 60 * 60 * 24),
+  );
+}

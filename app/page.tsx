@@ -12,8 +12,7 @@ import SightingsForm from "@/components/SightingsForm";
 import SightingsList from "@/components/SightingsList";
 import type { Sighting } from "@/types/sighting";
 import SeasonalTracking from "@/components/SeasonalTracking";
-import { formatDate } from "@/lib/dateUtils";
-import { parseLocalDate } from "@/lib/dateUtils";
+import { formatDate, daysSince } from "@/lib/dateUtils";
 
 type SortOrder = "newest" | "oldest";
 
@@ -169,9 +168,7 @@ export default function Home() {
     const firstSeen = sortedDates[0];
     const lastSeen = sortedDates[sortedDates.length - 1];
 
-    const daysSinceSeen = Math.floor(
-      (Date.now() - parseLocalDate(lastSeen).getTime()) / (1000 * 60 * 60 * 24),
-    );
+    const daysSinceSeen = daysSince(lastSeen);
 
     return {
       species,
