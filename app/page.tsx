@@ -31,6 +31,7 @@ const birds = [
   "Great Blue Heron",
   "House Finch",
   "House Sparrow",
+  "Killdeer",
   "Mallard",
   "Mourning Dove",
   "Northern Cardinal",
