@@ -6,6 +6,7 @@ type Props = {
   options: string[];
   label?: string;
   placeholder?: string;
+  searchable?: boolean;
 };
 
 export default function SpeciesSelect({
@@ -14,6 +15,7 @@ export default function SpeciesSelect({
   options,
   label = "Species",
   placeholder = "Select a species...",
+  searchable = false,
 }: Props) {
   return (
     <div style={{ marginBottom: "0.5rem" }}>
