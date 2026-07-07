@@ -25,7 +25,7 @@ export default function SightingsForm({
   successMessage,
   errorMessage,
 }: Props) {
-  const [species, setSpecies] = useState(birds[0]);
+  const [species, setSpecies] = useState("");
   const [count, setCount] = useState(1);
   const [notes, setNotes] = useState("");
   const [location, setLocation] = useState("");
@@ -35,7 +35,7 @@ export default function SightingsForm({
     const success = await onAdd(species, count, notes, location, date_seen);
 
     if (success) {
-      setSpecies(birds[0]);
+      setSpecies("");
       setCount(1);
       setNotes("");
       setLocation("");
@@ -101,7 +101,7 @@ export default function SightingsForm({
           type="text"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-          placeholder="Backyard, Fox River Park, Retzer Nature Center..."
+          placeholder="Backyard, Park, Nature Center..."
           style={{
             padding: "0.5rem",
             borderRadius: "6px",
@@ -165,26 +165,26 @@ export default function SightingsForm({
 
       <button
         onClick={handleSubmit}
-        disabled={loading}
+        disabled={loading || !species}
         style={{
           marginTop: "1rem",
           padding: "0.6rem 1rem",
           border: "none",
           borderRadius: "6px",
-          backgroundColor: loading ? "#999" : "#2e7d32",
+          backgroundColor: loading || !species ? "#999" : "#2e7d32",
           color: "white",
-          cursor: loading ? "not-allowed" : "pointer",
+          cursor: loading || !species ? "not-allowed" : "pointer",
           fontSize: "1rem",
           width: "100%",
           transition: "background-color 0.2s ease",
         }}
         onMouseEnter={(e) => {
-          if (!loading) {
+          if (!loading && species) {
             e.currentTarget.style.backgroundColor = "#256628";
           }
         }}
         onMouseLeave={(e) => {
-          if (!loading) {
+          if (!loading && species) {
             e.currentTarget.style.backgroundColor = "#2e7d32";
           }
         }}

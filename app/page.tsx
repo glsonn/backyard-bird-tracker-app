@@ -13,38 +13,9 @@ import SightingsList from "@/components/SightingsList";
 import type { Sighting } from "@/types/sighting";
 import SeasonalTracking from "@/components/SeasonalTracking";
 import { formatDate, daysSince } from "@/lib/dateUtils";
+import { birds } from "@/lib/birds";
 
 type SortOrder = "newest" | "oldest";
-
-const birds = [
-  "American Crow",
-  "American Goldfinch",
-  "American Robin",
-  "Black-capped Chickadee",
-  "Blue Jay",
-  "Brown-headed Cowbird",
-  "Canada Goose",
-  "Common Grackle",
-  "Dark-eyed Junco",
-  "Downy Woodpecker",
-  "European Starling",
-  "Great Blue Heron",
-  "House Finch",
-  "House Sparrow",
-  "Killdeer",
-  "Mallard",
-  "Mourning Dove",
-  "Northern Cardinal",
-  "Northern Flicker",
-  "Northern House Wren",
-  "Red-bellied Woodpecker",
-  "Red-tailed Hawk",
-  "Red-winged Blackbird",
-  "Ruby-throated Hummingbird",
-  "Sandhill Crane",
-  "White-breasted Nuthatch",
-  "Wild Turkey",
-];
 
 export default function Home() {
   const [sightings, setSightings] = useState<Sighting[]>([]);

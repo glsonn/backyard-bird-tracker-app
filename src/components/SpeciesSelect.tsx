@@ -29,6 +29,7 @@ export default function SpeciesSelect({
           borderRadius: "6px",
         }}
       >
+        <option value="">Select a species...</option>
         {options.map((species) => (
           <option key={species} value={species}>
             {species}
