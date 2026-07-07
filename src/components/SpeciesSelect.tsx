@@ -5,6 +5,7 @@ type Props = {
   onChange: (value: string) => void;
   options: string[];
   label?: string;
+  placeholder?: string;
 };
 
 export default function SpeciesSelect({
@@ -12,6 +13,7 @@ export default function SpeciesSelect({
   onChange,
   options,
   label = "Species",
+  placeholder = "Select a species...",
 }: Props) {
   return (
     <div style={{ marginBottom: "0.5rem" }}>
@@ -29,7 +31,7 @@ export default function SpeciesSelect({
           borderRadius: "6px",
         }}
       >
-        <option value="">Select a species...</option>
+        <option value="">{placeholder}</option>
         {options.map((species) => (
           <option key={species} value={species}>
             {species}
