@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   value: string;
@@ -22,6 +22,10 @@ export default function SpeciesSelect({
   const [search, setSearch] = useState("");
   const [showResults, setShowResults] = useState(false);
 
+  useEffect(() => {
+    setSearch(value);
+  }, [value]);
+
   const filteredOptions = options.filter((species) =>
     species.toLowerCase().includes(search.toLowerCase()),
   );
@@ -32,10 +36,16 @@ export default function SpeciesSelect({
 
         <input
           type="text"
-          value={search || value}
+          value={search}
           onChange={(e) => {
-            setSearch(e.target.value);
+            const text = e.target.value;
+
+            setSearch(text);
             setShowResults(true);
+
+            if (text !== value) {
+              onChange("");
+            }
           }}
           onFocus={() => setShowResults(true)}
           placeholder={placeholder}
@@ -64,7 +74,7 @@ export default function SpeciesSelect({
                 key={species}
                 onClick={() => {
                   onChange(species);
-                  setSearch("");
+                  setSearch(species);
                   setShowResults(false);
                 }}
                 style={{
