@@ -52,14 +52,19 @@ export default function SightingsForm({
         marginBottom: "2rem",
       }}
     >
-      <SpeciesSelect value={species} options={birds} onChange={setSpecies} />
-
+      <SpeciesSelect
+        value={species}
+        options={birds}
+        onChange={setSpecies}
+        searchable
+      />
       <div>
         <label>Count</label>
         <br />
         <input
           type="number"
           min="1"
+          step="1"
           value={count}
           onChange={(e) => setCount(Number(e.target.value))}
           onFocus={(e) => e.target.select()}
@@ -74,13 +79,13 @@ export default function SightingsForm({
           }}
         />
       </div>
-
       <div>
         <label>Date Seen</label>
         <br />
         <input
           type="date"
           value={date_seen}
+          max={getTodayDateString()}
           onChange={(e) => setDateSeen(e.target.value)}
           style={{
             padding: "0.5rem",
@@ -93,7 +98,6 @@ export default function SightingsForm({
           }}
         />
       </div>
-
       <div>
         <label>Location (optional)</label>
         <br />
@@ -113,7 +117,6 @@ export default function SightingsForm({
           }}
         />
       </div>
-
       <div>
         <label>Notes (optional)</label>
         <br />
@@ -132,7 +135,6 @@ export default function SightingsForm({
           }}
         />
       </div>
-
       {successMessage && (
         <div
           style={{
@@ -147,7 +149,6 @@ export default function SightingsForm({
           {successMessage}
         </div>
       )}
-
       {errorMessage && (
         <div
           style={{
@@ -162,7 +163,6 @@ export default function SightingsForm({
           {errorMessage}
         </div>
       )}
-
       <button
         onClick={handleSubmit}
         disabled={loading || !species}

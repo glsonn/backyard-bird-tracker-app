@@ -17,6 +17,8 @@ const buttonBase: React.CSSProperties = {
   minWidth: "70px",
 };
 
+const NOTE_PREVIEW_LENGTH = 120;
+
 type Props = {
   sightings: Sighting[];
   isFetching: boolean;
@@ -52,7 +54,11 @@ export default function SightingsList({
     location: string;
     date_seen: string;
   } | null>(null);
+
   const [editingId, setEditingId] = useState<string | null>(null);
+
+  const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
+
   if (isFetching && sightings.length === 0) {
     return (
       <p style={{ textAlign: "center", color: "#666", padding: "1rem" }}>
@@ -304,7 +310,43 @@ export default function SightingsList({
 
                     {sighting.notes && (
                       <div style={{ marginBottom: "0.25rem" }}>
-                        Notes: {sighting.notes}
+                        <strong>Notes:</strong>{" "}
+                        {expandedNotes.has(sighting.id) ||
+                        sighting.notes.length <= NOTE_PREVIEW_LENGTH
+                          ? sighting.notes
+                          : `${sighting.notes.slice(0, NOTE_PREVIEW_LENGTH)}...`}
+                        {sighting.notes.length > NOTE_PREVIEW_LENGTH && (
+                          <>
+                            <br />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const next = new Set(expandedNotes);
+
+                                if (next.has(sighting.id)) {
+                                  next.delete(sighting.id);
+                                } else {
+                                  next.add(sighting.id);
+                                }
+
+                                setExpandedNotes(next);
+                              }}
+                              style={{
+                                background: "none",
+                                border: "none",
+                                color: "#2563eb",
+                                padding: 0,
+                                marginTop: "0.25rem",
+                                cursor: "pointer",
+                                fontSize: "0.9rem",
+                              }}
+                            >
+                              {expandedNotes.has(sighting.id)
+                                ? "Show less"
+                                : "Show more"}
+                            </button>
+                          </>
+                        )}
                       </div>
                     )}
                   </>
