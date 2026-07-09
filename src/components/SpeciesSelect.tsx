@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
   value: string;
@@ -22,16 +22,35 @@ export default function SpeciesSelect({
   const [search, setSearch] = useState("");
   const [showResults, setShowResults] = useState(false);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     setSearch(value);
   }, [value]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setShowResults(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const filteredOptions = options.filter((species) =>
     species.toLowerCase().includes(search.toLowerCase()),
   );
   if (searchable) {
     return (
-      <div style={{ marginBottom: "0.5rem" }}>
+      <div ref={containerRef} style={{ marginBottom: "0.5rem" }}>
         <label>{label}</label>
 
         <input
