@@ -20,6 +20,8 @@ export default function SpeciesSelect({
   searchable = false,
 }: Props) {
   const [search, setSearch] = useState("");
+  const [showResults, setShowResults] = useState(false);
+
   const filteredOptions = options.filter((species) =>
     species.toLowerCase().includes(search.toLowerCase()),
   );
@@ -30,8 +32,12 @@ export default function SpeciesSelect({
 
         <input
           type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={search || value}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setShowResults(true);
+          }}
+          onFocus={() => setShowResults(true)}
           placeholder={placeholder}
           style={{
             display: "block",
@@ -43,27 +49,35 @@ export default function SpeciesSelect({
           }}
         />
 
-        <div
-          style={{
-            marginTop: "0.5rem",
-            border: "1px solid #ccc",
-            borderRadius: "6px",
-            maxHeight: "200px",
-            overflowY: "auto",
-          }}
-        >
-          {filteredOptions.map((species) => (
-            <div
-              key={species}
-              style={{
-                padding: "0.5rem",
-                borderBottom: "1px solid #eee",
-              }}
-            >
-              {species}
-            </div>
-          ))}
-        </div>
+        {showResults && (
+          <div
+            style={{
+              marginTop: "0.5rem",
+              border: "1px solid #ccc",
+              borderRadius: "6px",
+              maxHeight: "200px",
+              overflowY: "auto",
+            }}
+          >
+            {filteredOptions.map((species) => (
+              <div
+                key={species}
+                onClick={() => {
+                  onChange(species);
+                  setSearch("");
+                  setShowResults(false);
+                }}
+                style={{
+                  padding: "0.5rem",
+                  borderBottom: "1px solid #eee",
+                  cursor: "pointer",
+                }}
+              >
+                {species}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   }
