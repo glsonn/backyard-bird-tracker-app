@@ -26,6 +26,7 @@ export default function Home() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
   const [speciesFilter, setSpeciesFilter] = useState<string>("");
+  const [selectedSpecies, setSelectedSpecies] = useState<string>("");
 
   async function fetchSightings(): Promise<void> {
     setIsFetching(true);
@@ -143,6 +144,10 @@ export default function Home() {
     const lastSeen = sortedDates[sortedDates.length - 1];
 
     const daysSinceSeen = daysSince(lastSeen);
+
+    const lastSeenSighting = sightings
+      .filter((sighting) => sighting.species === selectedSpecies)
+      .sort((a, b) => b.date_seen.localeCompare(a.date_seen))[0];
 
     return {
       species,
@@ -265,6 +270,8 @@ export default function Home() {
         loading={loading}
         successMessage={successMessage}
         errorMessage={errorMessage}
+        selectedSpecies={selectedSpecies}
+        onSpeciesChange={setSelectedSpecies}
       />
 
       {!isFetching && displayedSightings.length === 0 && (

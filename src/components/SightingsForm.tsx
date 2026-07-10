@@ -16,6 +16,8 @@ type Props = {
   loading: boolean;
   successMessage: string;
   errorMessage: string;
+  selectedSpecies: string;
+  onSpeciesChange: (species: string) => void;
 };
 
 export default function SightingsForm({
@@ -24,18 +26,25 @@ export default function SightingsForm({
   loading,
   successMessage,
   errorMessage,
+  selectedSpecies,
+  onSpeciesChange,
 }: Props) {
-  const [species, setSpecies] = useState("");
   const [count, setCount] = useState(1);
   const [notes, setNotes] = useState("");
   const [location, setLocation] = useState("");
   const [date_seen, setDateSeen] = useState(getTodayDateString());
 
   async function handleSubmit() {
-    const success = await onAdd(species, count, notes, location, date_seen);
+    const success = await onAdd(
+      selectedSpecies,
+      count,
+      notes,
+      location,
+      date_seen,
+    );
 
     if (success) {
-      setSpecies("");
+      onSpeciesChange("");
       setCount(1);
       setNotes("");
       setLocation("");
@@ -53,9 +62,9 @@ export default function SightingsForm({
       }}
     >
       <SpeciesSelect
-        value={species}
+        value={selectedSpecies}
         options={birds}
-        onChange={setSpecies}
+        onChange={onSpeciesChange}
         searchable
       />
       <div>
@@ -165,26 +174,26 @@ export default function SightingsForm({
       )}
       <button
         onClick={handleSubmit}
-        disabled={loading || !species}
+        disabled={loading || !selectedSpecies}
         style={{
           marginTop: "1rem",
           padding: "0.6rem 1rem",
           border: "none",
           borderRadius: "6px",
-          backgroundColor: loading || !species ? "#999" : "#2e7d32",
+          backgroundColor: loading || !selectedSpecies ? "#999" : "#2e7d32",
           color: "white",
-          cursor: loading || !species ? "not-allowed" : "pointer",
+          cursor: loading || !selectedSpecies ? "not-allowed" : "pointer",
           fontSize: "1rem",
           width: "100%",
           transition: "background-color 0.2s ease",
         }}
         onMouseEnter={(e) => {
-          if (!loading && species) {
+          if (!loading && selectedSpecies) {
             e.currentTarget.style.backgroundColor = "#256628";
           }
         }}
         onMouseLeave={(e) => {
-          if (!loading && species) {
+          if (!loading && selectedSpecies) {
             e.currentTarget.style.backgroundColor = "#2e7d32";
           }
         }}
