@@ -145,10 +145,6 @@ export default function Home() {
 
     const daysSinceSeen = daysSince(lastSeen);
 
-    const lastSeenSighting = sightings
-      .filter((sighting) => sighting.species === selectedSpecies)
-      .sort((a, b) => b.date_seen.localeCompare(a.date_seen))[0];
-
     return {
       species,
       firstSeen,
@@ -250,6 +246,10 @@ export default function Home() {
     }
   }
 
+  const lastSeenSighting = sightings
+    .filter((sighting) => sighting.species === selectedSpecies)
+    .sort((a, b) => b.date_seen.localeCompare(a.date_seen))[0];
+
   return (
     <main
       style={{
@@ -272,6 +272,7 @@ export default function Home() {
         errorMessage={errorMessage}
         selectedSpecies={selectedSpecies}
         onSpeciesChange={setSelectedSpecies}
+        lastSeenSighting={lastSeenSighting}
       />
 
       {!isFetching && displayedSightings.length === 0 && (

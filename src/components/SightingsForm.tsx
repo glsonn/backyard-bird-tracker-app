@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import SpeciesSelect from "@/components/SpeciesSelect";
-import { getTodayDateString } from "@/lib/dateUtils";
+import { getTodayDateString, formatDate, daysSince } from "@/lib/dateUtils";
+import type { Sighting } from "@/types/sighting";
 
 type Props = {
   birds: string[];
@@ -18,6 +19,7 @@ type Props = {
   errorMessage: string;
   selectedSpecies: string;
   onSpeciesChange: (species: string) => void;
+  lastSeenSighting: Sighting;
 };
 
 export default function SightingsForm({
@@ -28,11 +30,28 @@ export default function SightingsForm({
   errorMessage,
   selectedSpecies,
   onSpeciesChange,
+  lastSeenSighting,
 }: Props) {
   const [count, setCount] = useState(1);
   const [notes, setNotes] = useState("");
   const [location, setLocation] = useState("");
   const [date_seen, setDateSeen] = useState(getTodayDateString());
+
+  const lastSeenRelativeText = lastSeenSighting
+    ? (() => {
+        const days = daysSince(lastSeenSighting.date_seen);
+
+        if (days === 0) {
+          return "today";
+        }
+
+        if (days === 1) {
+          return "1 day ago";
+        }
+
+        return `${days} days ago`;
+      })()
+    : "";
 
   async function handleSubmit() {
     const success = await onAdd(
@@ -67,6 +86,24 @@ export default function SightingsForm({
         onChange={onSpeciesChange}
         searchable
       />
+      {selectedSpecies && (
+        <div
+          style={{
+            marginTop: "-0.5rem",
+            fontSize: "0.9rem",
+            color: "#555",
+          }}
+        >
+          {lastSeenSighting ? (
+            <>
+              Last seen: {formatDate(lastSeenSighting.date_seen)} (
+              {lastSeenRelativeText})
+            </>
+          ) : (
+            <>This is your first recorded sighting of this species.</>
+          )}
+        </div>
+      )}
       <div>
         <label>Count</label>
         <br />
