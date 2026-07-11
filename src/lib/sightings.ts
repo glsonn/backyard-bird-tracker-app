@@ -5,6 +5,7 @@ export async function getSightings() {
   return await supabase
     .from("sightings")
     .select("*")
+    .eq("user_id", getUserId())
     .order("created_at", { ascending: false });
 }
 
@@ -32,7 +33,11 @@ export async function createSighting(
 }
 
 export async function deleteSighting(id: string) {
-  return await supabase.from("sightings").delete().eq("id", id);
+  return await supabase
+    .from("sightings")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", getUserId());
 }
 
 export async function updateSighting(
@@ -55,6 +60,7 @@ export async function updateSighting(
       date_seen: updates.date_seen,
     })
     .eq("id", id)
+    .eq("user_id", getUserId())
     .select()
     .single();
 
