@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { getUserId } from "@/lib/userId";
 import {
   getSightings,
   createSighting,
@@ -18,6 +19,7 @@ import type { Sighting, SightingDayGroup } from "@/types/sighting";
 type SortOrder = "newest" | "oldest";
 
 export default function Home() {
+  const userId = getUserId();
   const [sightings, setSightings] = useState<Sighting[]>([]);
   const [loading, setLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
