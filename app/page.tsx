@@ -10,7 +10,6 @@ import {
 } from "@/lib/sightings";
 import SightingsForm from "@/components/SightingsForm";
 import SightingsList from "@/components/SightingsList";
-import type { Sighting } from "@/types/sighting";
 import SeasonalTracking from "@/components/SeasonalTracking";
 import { formatDate, daysSince } from "@/lib/dateUtils";
 import { birds } from "@/lib/birds";
