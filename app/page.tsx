@@ -14,6 +14,7 @@ import type { Sighting } from "@/types/sighting";
 import SeasonalTracking from "@/components/SeasonalTracking";
 import { formatDate, daysSince } from "@/lib/dateUtils";
 import { birds } from "@/lib/birds";
+import type { Sighting, SightingDayGroup } from "@/types/sighting";
 
 type SortOrder = "newest" | "oldest";
 
@@ -70,6 +71,21 @@ export default function Home() {
 
       return new Date(b.date_seen).getTime() - new Date(a.date_seen).getTime();
     });
+
+  const groupedSightings: SightingDayGroup[] = [];
+
+  for (const sighting of displayedSightings) {
+    const lastGroup = groupedSightings[groupedSightings.length - 1];
+
+    if (lastGroup?.date === sighting.date_seen) {
+      lastGroup.sightings.push(sighting);
+    } else {
+      groupedSightings.push({
+        date: sighting.date_seen,
+        sightings: [sighting],
+      });
+    }
+  }
 
   const speciesOptions = Array.from(
     new Set(sightings.map((sighting) => sighting.species)),
@@ -573,7 +589,7 @@ export default function Home() {
         </div>
       </div>
       <SightingsList
-        sightings={displayedSightings}
+        groups={groupedSightings}
         isFetching={isFetching}
         deletingId={deletingId}
         onDelete={handleDelete}

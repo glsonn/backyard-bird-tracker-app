@@ -7,3 +7,8 @@ export type Sighting = {
   created_at: string;
   date_seen: string;
 };
+
+export type SightingDayGroup = {
+  date: string;
+  sightings: Sighting[];
+};
