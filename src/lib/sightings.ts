@@ -1,4 +1,5 @@
 import { supabase } from "./supabase";
+import { getUserId } from "./userId";
 
 export async function getSightings() {
   return await supabase
@@ -23,6 +24,7 @@ export async function createSighting(
         notes: notes || null,
         location: location || null,
         date_seen,
+        user_id: getUserId(),
       },
     ])
     .select()
