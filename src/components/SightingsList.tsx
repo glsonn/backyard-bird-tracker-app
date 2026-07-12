@@ -236,6 +236,8 @@ export default function SightingsList({
                               <label>Count</label>
                               <input
                                 type="number"
+                                min={1}
+                                step={1}
                                 value={draftSighting.count}
                                 onChange={(e) =>
                                   setDraftSighting({
@@ -340,6 +342,21 @@ export default function SightingsList({
                               type="button"
                               onClick={async () => {
                                 if (!draftSighting || !editingId) return;
+
+                                if (!draftSighting.species.trim()) {
+                                  alert("Please select a bird species.");
+                                  return;
+                                }
+
+                                if (
+                                  !Number.isInteger(draftSighting.count) ||
+                                  draftSighting.count < 1
+                                ) {
+                                  alert(
+                                    "Count must be a whole number greater than 0.",
+                                  );
+                                  return;
+                                }
 
                                 await onUpdateSighting(
                                   editingId,
