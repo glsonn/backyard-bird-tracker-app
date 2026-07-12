@@ -120,6 +120,8 @@ export default function SightingsList({
 
   const isRefreshing = isFetching && groups.length > 0;
 
+  const today = getTodayDateString();
+
   return (
     <>
       {isRefreshing && (
@@ -149,6 +151,7 @@ export default function SightingsList({
           return (
             <li
               key={group.date}
+              id={group.date === today ? "today-sightings" : undefined}
               style={{
                 listStyle: "none",
                 marginBottom: "1.5rem",

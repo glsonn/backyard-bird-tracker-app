@@ -589,6 +589,36 @@ export default function Home() {
           </select>
         </div>
       </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: "1rem",
+        }}
+      >
+        <button
+          type="button"
+          onClick={() =>
+            document.getElementById("today-sightings")?.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            })
+          }
+          style={{
+            padding: "0.5rem 0.9rem",
+            borderRadius: "6px",
+            border: "1px solid #2563eb",
+            backgroundColor: "#2563eb",
+            color: "white",
+            cursor: "pointer",
+            fontSize: "0.9rem",
+          }}
+        >
+          Jump to Today
+        </button>
+      </div>
+
       <SightingsList
         groups={groupedSightings}
         isFetching={isFetching}

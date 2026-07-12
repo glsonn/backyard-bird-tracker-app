@@ -6,6 +6,7 @@ export type Sighting = {
   location: string | null;
   created_at: string;
   date_seen: string;
+  user_id: string;
 };
 
 export type SightingDayGroup = {
