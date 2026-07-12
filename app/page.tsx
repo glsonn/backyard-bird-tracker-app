@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getUserId } from "@/lib/userId";
 import {
@@ -29,6 +29,7 @@ export default function Home() {
   const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
   const [speciesFilter, setSpeciesFilter] = useState<string>("");
   const [selectedSpecies, setSelectedSpecies] = useState<string>("");
+  const sightingsRef = useRef<HTMLDivElement | null>(null);
 
   async function fetchSightings(): Promise<void> {
     setIsFetching(true);
@@ -296,7 +297,7 @@ export default function Home() {
         <p style={{ marginTop: "1rem" }}>No sightings match your filter.</p>
       )}
 
-      {groupedSightings.length > 0 && (
+      {displayedSightings.length > 0 && (
         <div
           style={{
             display: "flex",
@@ -307,7 +308,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() =>
-              document.getElementById("today-sightings")?.scrollIntoView({
+              sightingsRef.current?.scrollIntoView({
                 behavior: "smooth",
                 block: "start",
               })
@@ -322,7 +323,7 @@ export default function Home() {
               fontSize: "0.9rem",
             }}
           >
-            Today&apos;s Sightings
+            Jump to Recent Sightings
           </button>
         </div>
       )}
@@ -621,15 +622,17 @@ export default function Home() {
         </div>
       </div>
 
-      <SightingsList
-        groups={groupedSightings}
-        isFetching={isFetching}
-        deletingId={deletingId}
-        onDelete={handleDelete}
-        isFilterActive={speciesFilter !== ""}
-        onUpdateSighting={handleUpdateSighting}
-        birds={birds}
-      />
+      <div ref={sightingsRef}>
+        <SightingsList
+          groups={groupedSightings}
+          isFetching={isFetching}
+          deletingId={deletingId}
+          onDelete={handleDelete}
+          isFilterActive={speciesFilter !== ""}
+          onUpdateSighting={handleUpdateSighting}
+          birds={birds}
+        />
+      </div>
     </main>
   );
 }
