@@ -4,6 +4,7 @@ import { useState } from "react";
 import SpeciesSelect from "@/components/SpeciesSelect";
 import { getTodayDateString, formatDate, daysSince } from "@/lib/dateUtils";
 import type { Sighting } from "@/types/sighting";
+import { validateSighting } from "@/lib/validation";
 
 type Props = {
   birds: string[];
@@ -54,6 +55,13 @@ export default function SightingsForm({
     : "";
 
   async function handleSubmit() {
+    const validationError = validateSighting(selectedSpecies, count);
+
+    if (validationError) {
+      alert(validationError);
+      return;
+    }
+
     const success = await onAdd(
       selectedSpecies,
       count,

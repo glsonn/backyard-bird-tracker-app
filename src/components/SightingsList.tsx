@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import SpeciesSelect from "@/components/SpeciesSelect";
 import type { SightingDayGroup } from "@/types/sighting";
 import { formatDate, getTodayDateString } from "@/lib/dateUtils";
+import { validateSighting } from "@/lib/validation";
 
 const buttonBase: React.CSSProperties = {
   padding: "0.5rem 0.75rem",
@@ -343,18 +344,13 @@ export default function SightingsList({
                               onClick={async () => {
                                 if (!draftSighting || !editingId) return;
 
-                                if (!draftSighting.species.trim()) {
-                                  alert("Please select a bird species.");
-                                  return;
-                                }
+                                const validationError = validateSighting(
+                                  draftSighting.species,
+                                  draftSighting.count,
+                                );
 
-                                if (
-                                  !Number.isInteger(draftSighting.count) ||
-                                  draftSighting.count < 1
-                                ) {
-                                  alert(
-                                    "Count must be a whole number greater than 0.",
-                                  );
+                                if (validationError) {
+                                  alert(validationError);
                                   return;
                                 }
 
