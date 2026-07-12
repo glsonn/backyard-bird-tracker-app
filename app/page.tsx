@@ -296,6 +296,37 @@ export default function Home() {
         <p style={{ marginTop: "1rem" }}>No sightings match your filter.</p>
       )}
 
+      {groupedSightings.length > 0 && (
+        <div
+          style={{
+            display: "flex",
+            textAlign: "center",
+            margin: "0.5rem 0 1.5rem",
+          }}
+        >
+          <button
+            type="button"
+            onClick={() =>
+              document.getElementById("today-sightings")?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              })
+            }
+            style={{
+              padding: "0.5rem 0.9rem",
+              borderRadius: "6px",
+              border: "1px solid #2563eb",
+              backgroundColor: "#2563eb",
+              color: "white",
+              cursor: "pointer",
+              fontSize: "0.9rem",
+            }}
+          >
+            Today&apos;s Sightings
+          </button>
+        </div>
+      )}
+
       <div
         style={{
           border: "1px solid #ddd",
@@ -588,35 +619,6 @@ export default function Home() {
             <option value="oldest">Oldest First</option>
           </select>
         </div>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginBottom: "1rem",
-        }}
-      >
-        <button
-          type="button"
-          onClick={() =>
-            document.getElementById("today-sightings")?.scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            })
-          }
-          style={{
-            padding: "0.5rem 0.9rem",
-            borderRadius: "6px",
-            border: "1px solid #2563eb",
-            backgroundColor: "#2563eb",
-            color: "white",
-            cursor: "pointer",
-            fontSize: "0.9rem",
-          }}
-        >
-          Jump to Today
-        </button>
       </div>
 
       <SightingsList
