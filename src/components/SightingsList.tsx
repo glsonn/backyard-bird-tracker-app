@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SpeciesSelect from "@/components/SpeciesSelect";
 import type { SightingDayGroup } from "@/types/sighting";
 import { formatDate, getTodayDateString } from "@/lib/dateUtils";
@@ -60,8 +60,10 @@ export default function SightingsList({
 
   const [collapsedDates, setCollapsedDates] = useState<Set<string>>(new Set());
 
+  const hasInitializedCollapseState = useRef(false);
+
   useEffect(() => {
-    if (collapsedDates.size > 0 || groups.length === 0) {
+    if (hasInitializedCollapseState.current || groups.length === 0) {
       return;
     }
 
@@ -74,7 +76,9 @@ export default function SightingsList({
           .map((group) => group.date),
       ),
     );
-  }, [groups, collapsedDates]);
+
+    hasInitializedCollapseState.current = true;
+  }, [groups]);
 
   if (isFetching && groups.length === 0) {
     return (

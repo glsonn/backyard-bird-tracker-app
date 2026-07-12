@@ -300,7 +300,7 @@ export default function Home() {
         <div
           style={{
             display: "flex",
-            textAlign: "center",
+            justifyContent: "center",
             margin: "0.5rem 0 1.5rem",
           }}
         >
