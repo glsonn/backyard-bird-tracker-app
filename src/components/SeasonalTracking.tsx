@@ -15,11 +15,19 @@ type FirstSeenThisYear = {
 type SeasonalTrackingProps = {
   speciesData: SeasonalSpecies[];
   firstSeenThisYear: FirstSeenThisYear[];
+  visitorsNotSeenLately: VisitorNotSeenLately[];
+};
+
+type VisitorNotSeenLately = {
+  species: string;
+  lastSeen: string;
+  daysSinceSeen: number;
 };
 
 export default function SeasonalTracking({
   speciesData,
   firstSeenThisYear,
+  visitorsNotSeenLately,
 }: SeasonalTrackingProps) {
   if (speciesData.length === 0) {
     return null;
@@ -85,6 +93,50 @@ export default function SeasonalTracking({
                 }}
               >
                 {formatDate(species.firstSeen)}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {visitorsNotSeenLately.length > 0 && (
+        <div
+          style={{
+            marginBottom: "1.5rem",
+            paddingBottom: "1rem",
+            borderBottom: "1px solid #eee",
+          }}
+        >
+          <div
+            style={{
+              fontWeight: 600,
+              marginBottom: "0.5rem",
+            }}
+          >
+            Visitors We Haven&apos;t Seen Lately
+          </div>
+
+          {visitorsNotSeenLately.map((species) => (
+            <div
+              key={species.species}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr auto",
+                gap: "0.75rem",
+                alignItems: "baseline",
+                marginBottom: "0.35rem",
+              }}
+            >
+              <span>{species.species}</span>
+
+              <span
+                style={{
+                  whiteSpace: "nowrap",
+                  color: "#666",
+                  fontSize: "0.9rem",
+                }}
+              >
+                {formatDate(species.lastSeen)}
               </span>
             </div>
           ))}

@@ -205,6 +205,18 @@ export default function Home() {
     )
     .sort((a, b) => a.firstSeen.localeCompare(b.firstSeen));
 
+  const visitorsNotSeenLately = seasonalSpeciesData
+    .filter((species) => {
+      const seenThisYear = sightings.some(
+        (sighting) =>
+          sighting.species === species.species &&
+          sighting.date_seen.startsWith(String(currentYear)),
+      );
+
+      return seenThisYear && species.daysSinceSeen >= 30;
+    })
+    .sort((a, b) => b.daysSinceSeen - a.daysSinceSeen);
+
   async function addSighting(
     species: string,
     count: number,
@@ -541,6 +553,7 @@ export default function Home() {
       <SeasonalTracking
         speciesData={seasonalSpeciesData}
         firstSeenThisYear={firstSeenThisYear}
+        visitorsNotSeenLately={visitorsNotSeenLately}
       />
 
       <h2>Recent Sightings</h2>
