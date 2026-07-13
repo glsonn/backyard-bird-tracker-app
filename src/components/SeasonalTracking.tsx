@@ -65,8 +65,27 @@ export default function SeasonalTracking({
           </div>
 
           {firstSeenThisYear.map((species) => (
-            <div key={species.species}>
-              {species.species} — {formatDate(species.firstSeen)}
+            <div
+              key={species.species}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr auto",
+                gap: "0.75rem",
+                alignItems: "baseline",
+                marginBottom: "0.35rem",
+              }}
+            >
+              <span>{species.species}</span>
+
+              <span
+                style={{
+                  whiteSpace: "nowrap",
+                  color: "#666",
+                  fontSize: "0.9rem",
+                }}
+              >
+                {formatDate(species.firstSeen)}
+              </span>
             </div>
           ))}
         </div>
