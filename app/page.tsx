@@ -30,6 +30,7 @@ export default function Home() {
   const [speciesFilter, setSpeciesFilter] = useState<string>("");
   const [selectedSpecies, setSelectedSpecies] = useState<string>("");
   const sightingsRef = useRef<HTMLDivElement | null>(null);
+  const topRef = useRef<HTMLElement | null>(null);
 
   async function fetchSightings(): Promise<void> {
     setIsFetching(true);
@@ -270,6 +271,7 @@ export default function Home() {
 
   return (
     <main
+      ref={topRef}
       style={{
         maxWidth: "700px",
         margin: "0 auto",
@@ -506,6 +508,28 @@ export default function Home() {
       <SeasonalTracking speciesData={seasonalSpeciesData} />
 
       <h2>Recent Sightings</h2>
+
+      <button
+        type="button"
+        onClick={() =>
+          topRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          })
+        }
+        style={{
+          padding: "0.3rem 0",
+          marginBottom: "0.75rem",
+          background: "none",
+          border: "none",
+          color: "#2563eb",
+          cursor: "pointer",
+          fontSize: "0.9rem",
+        }}
+      >
+        ↑ Back to top
+      </button>
+
       <div
         style={{
           display: "flex",
