@@ -172,6 +172,39 @@ export default function Home() {
     };
   });
 
+  const currentYear = new Date().getFullYear();
+
+  const firstSeenThisYear = speciesSeenList
+    .map((species) => {
+      const sightingsThisYear = sightings.filter(
+        (sighting) =>
+          sighting.species === species &&
+          sighting.date_seen.startsWith(String(currentYear)),
+      );
+
+      if (sightingsThisYear.length === 0) {
+        return null;
+      }
+
+      const firstSeen = sightingsThisYear
+        .map((sighting) => sighting.date_seen)
+        .sort()[0];
+
+      return {
+        species,
+        firstSeen,
+      };
+    })
+    .filter(
+      (
+        item,
+      ): item is {
+        species: string;
+        firstSeen: string;
+      } => item !== null,
+    )
+    .sort((a, b) => a.firstSeen.localeCompare(b.firstSeen));
+
   async function addSighting(
     species: string,
     count: number,
@@ -505,7 +538,10 @@ export default function Home() {
         </ul>
       </div>
 
-      <SeasonalTracking speciesData={seasonalSpeciesData} />
+      <SeasonalTracking
+        speciesData={seasonalSpeciesData}
+        firstSeenThisYear={firstSeenThisYear}
+      />
 
       <h2>Recent Sightings</h2>
 

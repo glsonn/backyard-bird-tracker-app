@@ -7,12 +7,19 @@ type SeasonalSpecies = {
   daysSinceSeen: number;
 };
 
+type FirstSeenThisYear = {
+  species: string;
+  firstSeen: string;
+};
+
 type SeasonalTrackingProps = {
   speciesData: SeasonalSpecies[];
+  firstSeenThisYear: FirstSeenThisYear[];
 };
 
 export default function SeasonalTracking({
   speciesData,
+  firstSeenThisYear,
 }: SeasonalTrackingProps) {
   if (speciesData.length === 0) {
     return null;
@@ -39,6 +46,31 @@ export default function SeasonalTracking({
       >
         Seasonal Tracking
       </h2>
+
+      {firstSeenThisYear.length > 0 && (
+        <div
+          style={{
+            marginBottom: "1.5rem",
+            paddingBottom: "1rem",
+            borderBottom: "1px solid #eee",
+          }}
+        >
+          <div
+            style={{
+              fontWeight: 600,
+              marginBottom: "0.5rem",
+            }}
+          >
+            First Seen This Year
+          </div>
+
+          {firstSeenThisYear.map((species) => (
+            <div key={species.species}>
+              {species.species} — {formatDate(species.firstSeen)}
+            </div>
+          ))}
+        </div>
+      )}
 
       {speciesData.map((species) => (
         <div
