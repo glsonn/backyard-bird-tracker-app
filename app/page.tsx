@@ -329,6 +329,10 @@ export default function Home() {
         Backyard Bird Tracker
       </h1>
 
+      {!isFetching && totalSightings === 0 && (
+        <p>Start your bird journal by recording the visitors you see today.</p>
+      )}
+
       <SightingsForm
         birds={birds}
         onAdd={addSighting}
@@ -340,8 +344,10 @@ export default function Home() {
         lastSeenSighting={lastSeenSighting}
       />
 
-      {!isFetching && displayedSightings.length === 0 && (
-        <p style={{ marginTop: "1rem" }}>No sightings match your filter.</p>
+      {!isFetching && totalSightings === 0 && <p>No sightings recorded yet.</p>}
+
+      {!isFetching && totalSightings > 0 && displayedSightings.length === 0 && (
+        <p>No sightings match your filter.</p>
       )}
 
       {displayedSightings.length > 0 && (
