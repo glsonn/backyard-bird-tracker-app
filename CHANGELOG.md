@@ -85,3 +85,14 @@ Potential future improvements:
 - Seasonal arrival and departure tracking
 - CSV export
 - Additional personal reflection features
+
+---
+
+## July 15, 2026
+
+Prepare app for initial public testing
+
+- Added first-use guidance for new users
+- Clarified Seasonal Tracking descriptions
+- Updated visitor messaging for personal journal voice
+- Expanded species list
