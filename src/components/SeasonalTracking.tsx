@@ -55,6 +55,17 @@ export default function SeasonalTracking({
         Seasonal Tracking
       </h2>
 
+      <p
+        style={{
+          marginTop: "-0.5rem",
+          marginBottom: "1rem",
+          color: "#666",
+          fontSize: "0.9rem",
+        }}
+      >
+        See how your backyard visitors change throughout the year.
+      </p>
+
       {firstSeenThisYear.length > 0 && (
         <div
           style={{
@@ -71,6 +82,16 @@ export default function SeasonalTracking({
           >
             First Seen This Year
           </div>
+
+          <p
+            style={{
+              margin: "0 0 0.75rem",
+              color: "#666",
+              fontSize: "0.9rem",
+            }}
+          >
+            Birds you've recorded for the first time this year.
+          </p>
 
           {firstSeenThisYear.map((species) => (
             <div
@@ -113,8 +134,18 @@ export default function SeasonalTracking({
               marginBottom: "0.5rem",
             }}
           >
-            Visitors We Haven&apos;t Seen Lately
+            Visitors You Haven&apos;t Seen Lately
           </div>
+
+          <p
+            style={{
+              margin: "0 0 0.75rem",
+              color: "#666",
+              fontSize: "0.9rem",
+            }}
+          >
+            Birds you've seen this year that haven't stopped by recently.
+          </p>
 
           {visitorsNotSeenLately.map((species) => (
             <div
