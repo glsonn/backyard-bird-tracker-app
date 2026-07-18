@@ -33,6 +33,7 @@ export const birds = [
   "Northern House Wren",
   "Northern Mockingbird",
   "Red-bellied Woodpecker",
+  "Red-headed Woodpecker",
   "Red-tailed Hawk",
   "Red-winged Blackbird",
   "Ring-billed Gull",
