@@ -226,6 +226,26 @@ export default function Home() {
   ): Promise<boolean> {
     setLoading(true);
 
+    const existingSightings = sightings.filter((s) => s.species === species);
+
+    const isFirstEver = existingSightings.length === 0;
+
+    const year = date_seen.slice(0, 4);
+
+    const hasSeenThisYear = existingSightings.some((s) =>
+      s.date_seen.startsWith(year),
+    );
+
+    const isFirstThisYear = !isFirstEver && !hasSeenThisYear;
+
+    const previousSighting = existingSightings.sort((a, b) =>
+      b.date_seen.localeCompare(a.date_seen),
+    )[0];
+
+    const daysAgo = previousSighting
+      ? daysSince(previousSighting.date_seen)
+      : null;
+
     try {
       const { data, error } = await createSighting(
         species,
@@ -246,7 +266,17 @@ export default function Home() {
         setSightings((prev) => [data, ...prev]);
       }
 
-      setSuccessMessage("Sighting added successfully!");
+      let message = `✓ ${species} recorded.`;
+
+      if (isFirstEver) {
+        message = `🎉 Your first ${species}!`;
+      } else if (isFirstThisYear) {
+        message = `🌸 First ${species} of ${year}.`;
+      } else if (daysAgo !== null && daysAgo >= 30) {
+        message = `✓ ${species} recorded. Last seen ${daysAgo} days ago.`;
+      }
+
+      setSuccessMessage(message);
       setTimeout(() => setSuccessMessage(""), 2500);
 
       return true;
