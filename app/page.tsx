@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { getUserId } from "@/lib/userId";
 import {
   getSightings,
   createSighting,
@@ -19,7 +18,6 @@ import type { Sighting, SightingDayGroup } from "@/types/sighting";
 type SortOrder = "newest" | "oldest";
 
 export default function Home() {
-  const userId = getUserId();
   const [sightings, setSightings] = useState<Sighting[]>([]);
   const [loading, setLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
@@ -238,9 +236,11 @@ export default function Home() {
 
     const isFirstThisYear = !isFirstEver && !hasSeenThisYear;
 
-    const previousSighting = existingSightings.sort((a, b) =>
-      b.date_seen.localeCompare(a.date_seen),
-    )[0];
+    const previousSighting = existingSightings.reduce<Sighting | null>(
+      (latest, current) =>
+        !latest || current.date_seen > latest.date_seen ? current : latest,
+      null,
+    );
 
     const daysAgo = previousSighting
       ? daysSince(previousSighting.date_seen)
@@ -277,7 +277,7 @@ export default function Home() {
       }
 
       setSuccessMessage(message);
-      setTimeout(() => setSuccessMessage(""), 2500);
+      setTimeout(() => setSuccessMessage(""), 4000);
 
       return true;
     } catch (error) {
