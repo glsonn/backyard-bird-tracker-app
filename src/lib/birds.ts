@@ -16,6 +16,7 @@ export const birds = [
   "Common Yellowthroat",
   "Cooper's Hawk",
   "Dark-eyed Junco",
+  "Double-crested Cormorant",
   "Downy Woodpecker",
   "Eastern Bluebird",
   "Eastern Phoebe",
