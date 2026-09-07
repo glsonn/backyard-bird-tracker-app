@@ -9,4 +9,5 @@ export const birdImages: Record<string, string> = {
   "Downy Woodpecker": "/birds/downy-woodpecker.jpg",
   "Hairy Woodpecker": "/birds/hairy-woodpecker.jpg",
   "House Finch": "/birds/house-finch.jpg",
+  "Mourning Dove": "/birds/mourning-dove.jpg",
 };
