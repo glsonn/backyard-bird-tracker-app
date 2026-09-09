@@ -11,4 +11,5 @@ export const birdImages: Record<string, string> = {
   "House Finch": "/birds/house-finch.jpg",
   "House Sparrow": "/birds/house-sparrow.jpg",
   "Mourning Dove": "/birds/mourning-dove.jpg",
+  "Ruby-throated Hummingbird": "/birds/ruby-throated-hummingbird.jpg",
 };
