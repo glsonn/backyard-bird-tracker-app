@@ -14,4 +14,5 @@ export const birdImages: Record<string, string> = {
   "Northern Flicker": "/birds/northern-flicker.jpg",
   "Ruby-throated Hummingbird": "/birds/ruby-throated-hummingbird.jpg",
   "Sandhill Crane": "/birds/sandhill-crane.jpg",
+  "White-breasted Nuthatch": "/birds/white-breasted-nuthatch.jpg",
 };
