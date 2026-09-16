@@ -8,6 +8,7 @@ import {
   createSighting,
   deleteSighting,
   updateSighting,
+  replaceJournal,
 } from "@/lib/sightings";
 import SightingsForm from "@/components/SightingsForm";
 import SightingsList from "@/components/SightingsList";
@@ -30,6 +31,9 @@ export default function Home() {
   const [copyMessage, setCopyMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [importFile, setImportFile] = useState<File | null>(null);
+  const [importPreview, setImportPreview] = useState<Sighting[]>([]);
+  const [importMessage, setImportMessage] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>(() => {
     if (typeof window === "undefined") {
@@ -146,6 +150,293 @@ export default function Home() {
     } catch (error) {
       console.error(error);
       setCopyMessage("Unable to copy.");
+    }
+  }
+
+  function handleExportJournal() {
+    if (sightings.length === 0) {
+      alert("There are no sightings to export yet.");
+      return;
+    }
+
+    const headers = [
+      "id",
+      "created_at",
+      "species",
+      "count",
+      "notes",
+      "location",
+      "date_seen",
+    ];
+
+    const escapeCsvValue = (value: string | number | null | undefined) => {
+      const stringValue = String(value ?? "");
+
+      return `"${stringValue.replace(/"/g, '""')}"`;
+    };
+
+    const rows = sightings.map((sighting) =>
+      [
+        sighting.id,
+        sighting.created_at,
+        sighting.species,
+        sighting.count,
+        sighting.notes,
+        sighting.location,
+        sighting.date_seen,
+      ]
+        .map(escapeCsvValue)
+        .join(","),
+    );
+
+    const csv = [headers.join(","), ...rows].join("\r\n");
+
+    const blob = new Blob([csv], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = `backyard-bird-tracker-${new Date()
+      .toISOString()
+      .slice(0, 10)}.csv`;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  }
+
+  function handleImportFile(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setImportFile(file);
+    setImportPreview([]);
+    setImportMessage("");
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      try {
+        const text = String(reader.result ?? "");
+        const lines: string[] = [];
+        let currentLine = "";
+        let insideQuotes = false;
+
+        for (let i = 0; i < text.length; i++) {
+          const character = text[i];
+
+          if (character === '"') {
+            if (insideQuotes && text[i + 1] === '"') {
+              currentLine += '""';
+              i++;
+            } else {
+              insideQuotes = !insideQuotes;
+              currentLine += character;
+            }
+          } else if (
+            (character === "\n" || character === "\r") &&
+            !insideQuotes
+          ) {
+            if (character === "\r" && text[i + 1] === "\n") {
+              i++;
+            }
+
+            lines.push(currentLine);
+            currentLine = "";
+          } else {
+            currentLine += character;
+          }
+        }
+
+        if (currentLine) {
+          lines.push(currentLine);
+        }
+
+        if (lines.length < 2) {
+          setImportMessage("This file doesn't contain any sightings.");
+          return;
+        }
+
+        const headers = lines[0].split(",").map((header) => header.trim());
+
+        const requiredHeaders = [
+          "id",
+          "created_at",
+          "species",
+          "count",
+          "notes",
+          "location",
+          "date_seen",
+        ];
+
+        const hasRequiredHeaders = requiredHeaders.every((header) =>
+          headers.includes(header),
+        );
+
+        if (!hasRequiredHeaders) {
+          setImportMessage(
+            "This doesn't appear to be a Backyard Bird Tracker journal export.",
+          );
+          return;
+        }
+
+        const headerIndexes = {
+          id: headers.indexOf("id"),
+          created_at: headers.indexOf("created_at"),
+          species: headers.indexOf("species"),
+          count: headers.indexOf("count"),
+          notes: headers.indexOf("notes"),
+          location: headers.indexOf("location"),
+          date_seen: headers.indexOf("date_seen"),
+        };
+
+        function parseCsvLine(line: string): string[] {
+          const values: string[] = [];
+          let current = "";
+          let insideQuotes = false;
+
+          for (let i = 0; i < line.length; i++) {
+            const character = line[i];
+
+            if (character === '"') {
+              if (insideQuotes && line[i + 1] === '"') {
+                current += '"';
+                i++;
+              } else {
+                insideQuotes = !insideQuotes;
+              }
+            } else if (character === "," && !insideQuotes) {
+              values.push(current);
+              current = "";
+            } else {
+              current += character;
+            }
+          }
+
+          values.push(current);
+
+          return values;
+        }
+
+        const importedSightings: Sighting[] = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i].trim();
+
+          if (!line) {
+            continue;
+          }
+
+          const values = parseCsvLine(line);
+
+          const id = values[headerIndexes.id]?.trim();
+          const created_at = values[headerIndexes.created_at]?.trim();
+          const species = values[headerIndexes.species]?.trim();
+          const count = Number(values[headerIndexes.count]);
+          const notes = values[headerIndexes.notes]?.trim() ?? "";
+          const location = values[headerIndexes.location]?.trim() ?? "";
+          const date_seen = values[headerIndexes.date_seen]?.trim();
+
+          if (
+            !id ||
+            !created_at ||
+            !species ||
+            !Number.isInteger(count) ||
+            count < 1 ||
+            !date_seen
+          ) {
+            setImportPreview([]);
+            setImportMessage(
+              `The import file contains an invalid sighting on row ${i + 1}.`,
+            );
+            return;
+          }
+
+          importedSightings.push({
+            id,
+            created_at,
+            species,
+            count,
+            notes,
+            location,
+            date_seen,
+            user_id: journalId,
+          });
+        }
+
+        if (importedSightings.length === 0) {
+          setImportMessage("This file doesn't contain any sightings.");
+          return;
+        }
+
+        setImportPreview(importedSightings);
+        setImportMessage(
+          `${importedSightings.length} ${
+            importedSightings.length === 1 ? "sighting" : "sightings"
+          } ready to import.`,
+        );
+      } catch (error) {
+        console.error(error);
+        setImportPreview([]);
+        setImportMessage(
+          "We couldn't read this file. Please choose a Backyard Bird Tracker CSV export.",
+        );
+      }
+    };
+
+    reader.onerror = () => {
+      setImportPreview([]);
+      setImportMessage("We couldn't read that file. Please try again.");
+    };
+
+    reader.readAsText(file);
+  }
+
+  async function handleReplaceJournal() {
+    if (importPreview.length === 0) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `This will replace your current journal with ${importPreview.length} ${
+        importPreview.length === 1 ? "sighting" : "sightings"
+      } from the selected file.\n\nYour Journal ID will not change.\n\nContinue?`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setLoading(true);
+    setImportMessage("");
+
+    try {
+      const { error } = await replaceJournal(journalId, importPreview);
+
+      if (error) {
+        console.error(error);
+        setImportMessage(
+          "We couldn't import your journal. Your existing journal may still be unchanged.",
+        );
+        return;
+      }
+
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+      setImportMessage(
+        "Network error while importing your journal. Please try again.",
+      );
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -896,6 +1187,159 @@ export default function Home() {
           Your journal is connected to this browser using a unique Journal ID.
           Keep this ID somewhere safe in case your browser data is ever cleared.
         </p>
+
+        <div style={{ marginTop: "1rem" }}>
+          <button
+            type="button"
+            onClick={handleExportJournal}
+            disabled={sightings.length === 0}
+            style={{
+              padding: "0.5rem 0.75rem",
+              borderRadius: "6px",
+              border: "none",
+              backgroundColor: sightings.length === 0 ? "#999" : "#355c45",
+              color: "white",
+              cursor: sightings.length === 0 ? "not-allowed" : "pointer",
+            }}
+          >
+            Export Journal
+          </button>
+
+          <p
+            style={{
+              marginTop: "0.5rem",
+              marginBottom: 0,
+              fontSize: "0.85rem",
+              color: "#666",
+            }}
+          >
+            Save a copy of your journal as a CSV file.
+          </p>
+        </div>
+
+        <details style={{ marginTop: "1rem" }}>
+          <summary
+            style={{
+              cursor: "pointer",
+              fontWeight: 600,
+            }}
+          >
+            Import Journal
+          </summary>
+
+          <div style={{ marginTop: "1rem" }}>
+            <label
+              htmlFor="journalImport"
+              style={{
+                display: "inline-block",
+                padding: "0.5rem 0.75rem",
+                borderRadius: "6px",
+                border: "none",
+                backgroundColor: "#355c45",
+                color: "white",
+                cursor: "pointer",
+              }}
+            >
+              Choose a Backyard Bird Tracker CSV file
+            </label>
+
+            <input
+              id="journalImport"
+              type="file"
+              accept=".csv,text/csv"
+              onChange={handleImportFile}
+              style={{ display: "none" }}
+            />
+
+            {importFile && (
+              <p
+                style={{
+                  marginTop: "0.75rem",
+                  marginBottom: 0,
+                  fontSize: "0.85rem",
+                  color: "#666",
+                  wordBreak: "break-word",
+                }}
+              >
+                Selected file: <strong>{importFile.name}</strong>
+              </p>
+            )}
+
+            {importMessage && (
+              <p
+                style={{
+                  marginTop: "0.75rem",
+                  marginBottom: 0,
+                  fontSize: "0.9rem",
+                  color: importPreview.length > 0 ? "#355c45" : "#b91c1c",
+                }}
+              >
+                {importMessage}
+              </p>
+            )}
+
+            {importPreview.length > 0 && (
+              <div
+                style={{
+                  marginTop: "1rem",
+                  padding: "1rem",
+                  backgroundColor: "#f5f5f5",
+                  borderRadius: "6px",
+                }}
+              >
+                <strong>Import preview</strong>
+
+                <p
+                  style={{
+                    marginTop: "0.5rem",
+                    marginBottom: "0.75rem",
+                    fontSize: "0.9rem",
+                  }}
+                >
+                  This file contains <strong>{importPreview.length}</strong>{" "}
+                  {importPreview.length === 1 ? "sighting" : "sightings"} from{" "}
+                  <strong>
+                    {
+                      new Set(importPreview.map((sighting) => sighting.species))
+                        .size
+                    }
+                  </strong>{" "}
+                  {new Set(importPreview.map((sighting) => sighting.species))
+                    .size === 1
+                    ? "species"
+                    : "species"}
+                  .
+                </p>
+
+                <p
+                  style={{
+                    marginBottom: 0,
+                    fontSize: "0.85rem",
+                    color: "#666",
+                  }}
+                >
+                  No changes have been made to your journal.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleReplaceJournal}
+                  disabled={loading}
+                  style={{
+                    marginTop: "1rem",
+                    padding: "0.5rem 0.75rem",
+                    borderRadius: "6px",
+                    border: "none",
+                    backgroundColor: loading ? "#999" : "#355c45",
+                    color: "white",
+                    cursor: loading ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {loading ? "Importing..." : "Replace Current Journal"}
+                </button>
+              </div>
+            )}
+          </div>
+        </details>
 
         <div style={{ marginTop: "1rem" }}>
           <strong

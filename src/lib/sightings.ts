@@ -73,3 +73,26 @@ export async function updateSighting(
 
   return { data, error };
 }
+
+export async function replaceJournal(
+  userId: string,
+  sightings: {
+    id: string;
+    created_at: string;
+    species: string;
+    count: number;
+    notes: string | null;
+    location: string | null;
+    date_seen: string;
+  }[],
+) {
+  const { data, error } = await supabase.rpc("replace_journal", {
+    p_user_id: userId,
+    p_sightings: sightings,
+  });
+
+  return {
+    data,
+    error,
+  };
+}
