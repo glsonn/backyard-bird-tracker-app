@@ -17,6 +17,8 @@ import { formatDate, daysSince } from "@/lib/dateUtils";
 import { birds } from "@/lib/birds";
 import type { Sighting, SightingDayGroup } from "@/types/sighting";
 import { getUserId, setUserId } from "@/lib/userId";
+import Image from "next/image";
+import { birdImages } from "@/lib/birdImages";
 
 type SortOrder = "newest" | "oldest";
 
@@ -976,27 +978,46 @@ export default function Home() {
               <div
                 key={bird.species}
                 style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
                   marginBottom: "0.75rem",
                 }}
               >
-                <div
-                  style={{
-                    fontWeight: 600,
-                  }}
-                >
-                  {bird.species}
-                </div>
+                {birdImages[bird.species] && (
+                  <Image
+                    src={birdImages[bird.species]}
+                    alt=""
+                    width={48}
+                    height={48}
+                    style={{
+                      objectFit: "cover",
+                      borderRadius: "6px",
+                      flexShrink: 0,
+                    }}
+                  />
+                )}
 
-                <div
-                  style={{
-                    fontSize: "0.9rem",
-                    color: "#666",
-                  }}
-                >
-                  {bird.sightingsCount}{" "}
-                  {bird.sightingsCount === 1 ? "sighting" : "sightings"}
-                  {" • Last seen "}
-                  {formatDate(bird.lastSeen)}
+                <div>
+                  <div
+                    style={{
+                      fontWeight: 600,
+                    }}
+                  >
+                    {bird.species}
+                  </div>
+
+                  <div
+                    style={{
+                      fontSize: "0.9rem",
+                      color: "#666",
+                    }}
+                  >
+                    {bird.sightingsCount}{" "}
+                    {bird.sightingsCount === 1 ? "sighting" : "sightings"}
+                    {" • Last seen "}
+                    {formatDate(bird.lastSeen)}
+                  </div>
                 </div>
               </div>
             ))}
