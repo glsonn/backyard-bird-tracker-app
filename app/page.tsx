@@ -731,756 +731,787 @@ export default function Home() {
     .sort((a, b) => b.date_seen.localeCompare(a.date_seen))[0];
 
   return (
-    <main
-      ref={topRef}
-      style={{
-        maxWidth: "700px",
-        margin: "0 auto",
-        padding: "2rem",
-        width: "100%",
-        boxSizing: "border-box",
-      }}
-    >
-      <h1 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem" }}>
-        Backyard Bird Tracker
-      </h1>
-
-      {!isFetching && totalSightings === 0 && (
-        <p>Start your bird journal by recording your first visitors today.</p>
-      )}
-
-      <SightingsForm
-        birds={birds}
-        onAdd={addSighting}
-        loading={loading}
-        successMessage={successMessage}
-        errorMessage={errorMessage}
-        selectedSpecies={selectedSpecies}
-        onSpeciesChange={setSelectedSpecies}
-        lastSeenSighting={lastSeenSighting}
-      />
-
-      <p
+    <>
+      <main
+        ref={topRef}
         style={{
-          marginTop: "-0.25rem",
-          marginBottom: "1.5rem",
-          fontSize: "0.85rem",
-          color: "#666",
-          textAlign: "center",
+          maxWidth: "700px",
+          margin: "0 auto",
+          padding: "2rem",
+          width: "100%",
+          boxSizing: "border-box",
         }}
       >
-        Don't see the bird you're looking for?
-        <br />
-        <a
-          href="mailto:contact@backyardbirdtracker.com"
+        <h1
+          style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "1rem" }}
+        >
+          Backyard Bird Tracker
+        </h1>
+
+        {!isFetching && totalSightings === 0 && (
+          <p>Start your bird journal by recording your first visitors today.</p>
+        )}
+
+        <SightingsForm
+          birds={birds}
+          onAdd={addSighting}
+          loading={loading}
+          successMessage={successMessage}
+          errorMessage={errorMessage}
+          selectedSpecies={selectedSpecies}
+          onSpeciesChange={setSelectedSpecies}
+          lastSeenSighting={lastSeenSighting}
+        />
+
+        <p
           style={{
-            color: "#355c45",
-            fontWeight: 600,
+            marginTop: "-0.25rem",
+            marginBottom: "1.5rem",
+            fontSize: "0.85rem",
+            color: "#666",
+            textAlign: "center",
           }}
         >
-          Let us know.
-        </a>
-      </p>
-
-      {!isFetching && totalSightings === 0 && (
-        <p>Record today's first visitor above.</p>
-      )}
-
-      {!isFetching && totalSightings > 0 && displayedSightings.length === 0 && (
-        <>
-          <p>No sightings match the selected bird.</p>
-          <p>Try choosing "All Birds" to view your full journal.</p>
-        </>
-      )}
-
-      {displayedSightings.length > 0 && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            margin: "0.5rem 0 1.5rem",
-          }}
-        >
-          <button
-            type="button"
-            onClick={() =>
-              sightingsRef.current?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-              })
-            }
+          Don't see the bird you're looking for?
+          <br />
+          <a
+            href="mailto:contact@backyardbirdtracker.com"
             style={{
-              padding: "0.5rem 0.9rem",
-              borderRadius: "6px",
-              border: "1px solid #2563eb",
-              backgroundColor: "#2563eb",
-              color: "white",
-              cursor: "pointer",
-              fontSize: "0.9rem",
-            }}
-          >
-            Jump to Recent Sightings
-          </button>
-        </div>
-      )}
-
-      <div
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          padding: "1rem",
-          marginBottom: "1.5rem",
-          backgroundColor: "#f8fafc",
-          color: "#222",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-        }}
-      >
-        <h2
-          style={{
-            marginTop: 0,
-            marginBottom: "1rem",
-            fontSize: "1.1rem",
-            color: "#1e3a8a",
-          }}
-        >
-          Yard Stats
-        </h2>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-            gap: "0.75rem",
-          }}
-        >
-          <div>
-            <div
-              style={{
-                fontSize: "0.85rem",
-                color: "#666",
-              }}
-            >
-              Total Sightings
-            </div>
-
-            <div
-              style={{
-                fontSize: "1.4rem",
-                fontWeight: 700,
-              }}
-            >
-              {totalSightings}
-            </div>
-          </div>
-
-          <div>
-            <div
-              style={{
-                fontSize: "0.85rem",
-                color: "#666",
-              }}
-            >
-              Species Seen
-            </div>
-
-            <div
-              style={{
-                fontSize: "1.4rem",
-                fontWeight: 700,
-              }}
-            >
-              {speciesSeen}
-            </div>
-          </div>
-
-          <div>
-            <div
-              style={{
-                fontSize: "0.85rem",
-                color: "#666",
-              }}
-            >
-              Birds Counted
-            </div>
-
-            <div
-              style={{
-                fontSize: "1.4rem",
-                fontWeight: 700,
-              }}
-            >
-              {totalBirdsCounted}
-            </div>
-          </div>
-        </div>
-        <div
-          style={{
-            marginTop: "1rem",
-            paddingTop: "1rem",
-            borderTop: "1px solid #ddd",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "0.85rem",
-              color: "#666",
-              marginBottom: "0.25rem",
-            }}
-          >
-            Top Visitors
-          </div>
-
-          <div
-            style={{
-              fontSize: "1rem",
+              color: "#355c45",
               fontWeight: 600,
             }}
           >
-            {topVisitorsText}
-          </div>
-        </div>
-      </div>
+            Let us know.
+          </a>
+        </p>
 
-      <div
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          padding: "1rem",
-          marginBottom: "1.5rem",
-          backgroundColor: "#fff",
-          color: "#222",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-        }}
-      >
-        <h2
-          style={{
-            marginTop: 0,
-            marginBottom: "1rem",
-            fontSize: "1.1rem",
-            color: "#1e3a8a",
-          }}
-        >
-          Species Seen ({speciesSeenList.length})
-        </h2>
+        {!isFetching && totalSightings === 0 && (
+          <p>Record today's first visitor above.</p>
+        )}
 
-        {speciesSummary.length === 0 ? (
-          <p>
-            As you record birds, this list will become a living history of your
-            backyard visitors.
-          </p>
-        ) : (
-          <ul
+        {!isFetching &&
+          totalSightings > 0 &&
+          displayedSightings.length === 0 && (
+            <>
+              <p>No sightings match the selected bird.</p>
+              <p>Try choosing "All Birds" to view your full journal.</p>
+            </>
+          )}
+
+        {displayedSightings.length > 0 && (
+          <div
             style={{
-              margin: 0,
-              paddingLeft: "1.25rem",
+              display: "flex",
+              justifyContent: "center",
+              margin: "0.5rem 0 1.5rem",
             }}
           >
-            {speciesSummary.map((bird) => (
-              <div
-                key={bird.species}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.75rem",
-                  marginBottom: "0.75rem",
-                }}
-              >
-                {birdImages[bird.species] && (
-                  <Image
-                    src={birdImages[bird.species]}
-                    alt=""
-                    width={48}
-                    height={48}
-                    style={{
-                      objectFit: "cover",
-                      borderRadius: "6px",
-                      flexShrink: 0,
-                    }}
-                  />
-                )}
-
-                <div>
-                  <div
-                    style={{
-                      fontWeight: 600,
-                    }}
-                  >
-                    {bird.species}
-                  </div>
-
-                  <div
-                    style={{
-                      fontSize: "0.9rem",
-                      color: "#666",
-                    }}
-                  >
-                    {bird.sightingsCount}{" "}
-                    {bird.sightingsCount === 1 ? "sighting" : "sightings"}
-                    {" • Last seen "}
-                    {formatDate(bird.lastSeen)}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </ul>
+            <button
+              type="button"
+              onClick={() =>
+                sightingsRef.current?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                })
+              }
+              style={{
+                padding: "0.5rem 0.9rem",
+                borderRadius: "6px",
+                border: "1px solid #2563eb",
+                backgroundColor: "#2563eb",
+                color: "white",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+              }}
+            >
+              Jump to Recent Sightings
+            </button>
+          </div>
         )}
-      </div>
 
-      <SeasonalTracking
-        speciesData={seasonalSpeciesData}
-        firstSeenThisYear={firstSeenThisYear}
-        visitorsNotSeenLately={visitorsNotSeenLately}
-      />
-
-      <h2>Recent Sightings</h2>
-
-      <button
-        type="button"
-        onClick={() =>
-          topRef.current?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          })
-        }
-        style={{
-          padding: "0.3rem 0",
-          marginBottom: "0.75rem",
-          background: "none",
-          border: "none",
-          color: "#2563eb",
-          cursor: "pointer",
-          fontSize: "0.9rem",
-        }}
-      >
-        ↑ Back to top
-      </button>
-
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "1rem",
-          flexWrap: "wrap",
-          padding: "1rem",
-          marginBottom: "1.5rem",
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-        }}
-      >
-        <strong
-          style={{
-            width: "100%",
-            display: "block",
-            marginBottom: "0.5rem",
-          }}
-        >
-          List Controls
-        </strong>
         <div
           style={{
-            flex: "1 1 200px",
-            minWidth: 0,
+            border: "1px solid #ddd",
+            borderRadius: "8px",
+            padding: "1rem",
+            marginBottom: "1.5rem",
+            backgroundColor: "#f8fafc",
+            color: "#222",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
           }}
         >
-          <label
-            htmlFor="speciesFilter"
+          <h2
             style={{
-              display: "block",
-              marginBottom: "0.25rem",
-              fontSize: "0.9rem",
-              fontWeight: 500,
+              marginTop: 0,
+              marginBottom: "1rem",
+              fontSize: "1.1rem",
+              color: "#1e3a8a",
             }}
           >
-            Bird
-          </label>
-
-          <select
-            id="speciesFilter"
-            value={speciesFilter}
-            onChange={(e) => setSpeciesFilter(e.target.value)}
+            Yard Stats
+          </h2>
+          <div
             style={{
-              width: "100%",
-              maxWidth: "100%",
-              boxSizing: "border-box",
-              padding: "0.4rem",
-              border: "1px solid #ccc",
-              borderRadius: "6px",
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+              gap: "0.75rem",
             }}
           >
-            <option value="">All Birds</option>
+            <div>
+              <div
+                style={{
+                  fontSize: "0.85rem",
+                  color: "#666",
+                }}
+              >
+                Total Sightings
+              </div>
 
-            {speciesOptions.map((bird) => (
-              <option key={bird} value={bird}>
-                {bird}
-              </option>
-            ))}
-          </select>
+              <div
+                style={{
+                  fontSize: "1.4rem",
+                  fontWeight: 700,
+                }}
+              >
+                {totalSightings}
+              </div>
+            </div>
+
+            <div>
+              <div
+                style={{
+                  fontSize: "0.85rem",
+                  color: "#666",
+                }}
+              >
+                Species Seen
+              </div>
+
+              <div
+                style={{
+                  fontSize: "1.4rem",
+                  fontWeight: 700,
+                }}
+              >
+                {speciesSeen}
+              </div>
+            </div>
+
+            <div>
+              <div
+                style={{
+                  fontSize: "0.85rem",
+                  color: "#666",
+                }}
+              >
+                Birds Counted
+              </div>
+
+              <div
+                style={{
+                  fontSize: "1.4rem",
+                  fontWeight: 700,
+                }}
+              >
+                {totalBirdsCounted}
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: "1rem",
+              paddingTop: "1rem",
+              borderTop: "1px solid #ddd",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "0.85rem",
+                color: "#666",
+                marginBottom: "0.25rem",
+              }}
+            >
+              Top Visitors
+            </div>
+
+            <div
+              style={{
+                fontSize: "1rem",
+                fontWeight: 600,
+              }}
+            >
+              {topVisitorsText}
+            </div>
+          </div>
         </div>
+
+        <div
+          style={{
+            border: "1px solid #ddd",
+            borderRadius: "8px",
+            padding: "1rem",
+            marginBottom: "1.5rem",
+            backgroundColor: "#fff",
+            color: "#222",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+          }}
+        >
+          <h2
+            style={{
+              marginTop: 0,
+              marginBottom: "1rem",
+              fontSize: "1.1rem",
+              color: "#1e3a8a",
+            }}
+          >
+            Species Seen ({speciesSeenList.length})
+          </h2>
+
+          {speciesSummary.length === 0 ? (
+            <p>
+              As you record birds, this list will become a living history of
+              your backyard visitors.
+            </p>
+          ) : (
+            <ul
+              style={{
+                margin: 0,
+                paddingLeft: "1.25rem",
+              }}
+            >
+              {speciesSummary.map((bird) => (
+                <div
+                  key={bird.species}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.75rem",
+                    marginBottom: "0.75rem",
+                  }}
+                >
+                  {birdImages[bird.species] && (
+                    <Image
+                      src={birdImages[bird.species]}
+                      alt=""
+                      width={48}
+                      height={48}
+                      style={{
+                        objectFit: "cover",
+                        borderRadius: "6px",
+                        flexShrink: 0,
+                      }}
+                    />
+                  )}
+
+                  <div>
+                    <div
+                      style={{
+                        fontWeight: 600,
+                      }}
+                    >
+                      {bird.species}
+                    </div>
+
+                    <div
+                      style={{
+                        fontSize: "0.9rem",
+                        color: "#666",
+                      }}
+                    >
+                      {bird.sightingsCount}{" "}
+                      {bird.sightingsCount === 1 ? "sighting" : "sightings"}
+                      {" • Last seen "}
+                      {formatDate(bird.lastSeen)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <SeasonalTracking
+          speciesData={seasonalSpeciesData}
+          firstSeenThisYear={firstSeenThisYear}
+          visitorsNotSeenLately={visitorsNotSeenLately}
+        />
+
+        <h2>Recent Sightings</h2>
 
         <button
           type="button"
-          onClick={() => setSpeciesFilter("")}
-          disabled={!speciesFilter}
+          onClick={() =>
+            topRef.current?.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            })
+          }
           style={{
-            padding: "0.4rem 0.7rem",
-            borderRadius: "6px",
-            backgroundColor: !speciesFilter ? "#d1d5db" : "#dc2626",
-            color: "white",
-            border: "1px solid #b91c1c",
-            cursor: !speciesFilter ? "not-allowed" : "pointer",
-            opacity: !speciesFilter ? 0.7 : 1,
+            padding: "0.3rem 0",
+            marginBottom: "0.75rem",
+            background: "none",
+            border: "none",
+            color: "#2563eb",
+            cursor: "pointer",
+            fontSize: "0.9rem",
           }}
         >
-          Clear
+          ↑ Back to top
         </button>
 
         <div
           style={{
-            flex: "1 1 200px",
-            minWidth: 0,
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+            flexWrap: "wrap",
+            padding: "1rem",
+            marginBottom: "1.5rem",
+            border: "1px solid #ddd",
+            borderRadius: "8px",
           }}
         >
-          <label
-            htmlFor="sortOrder"
-            style={{
-              display: "block",
-              marginBottom: "0.25rem",
-              fontSize: "0.9rem",
-              fontWeight: 500,
-            }}
-          >
-            Sort
-          </label>
-
-          <select
-            id="sortOrder"
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as SortOrder)}
-            style={{
-              width: "100%",
-              maxWidth: "100%",
-              boxSizing: "border-box",
-              padding: "0.4rem",
-              border: "1px solid #ccc",
-              borderRadius: "6px",
-            }}
-          >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-          </select>
-        </div>
-      </div>
-
-      <div ref={sightingsRef}>
-        <SightingsList
-          groups={groupedSightings}
-          isFetching={isFetching}
-          deletingId={deletingId}
-          onDelete={handleDelete}
-          isFilterActive={speciesFilter !== ""}
-          onUpdateSighting={handleUpdateSighting}
-          birds={birds}
-        />
-      </div>
-
-      <div
-        style={{
-          marginTop: "2rem",
-          paddingTop: "1.5rem",
-          borderTop: "1px solid #ddd",
-        }}
-      >
-        <h2
-          style={{
-            marginTop: 0,
-            fontSize: "1rem",
-          }}
-        >
-          Journal Recovery
-        </h2>
-
-        <p
-          style={{
-            fontSize: "0.9rem",
-            color: "#666",
-            lineHeight: 1.5,
-          }}
-        >
-          Your journal is connected to this browser using a unique Journal ID.
-          Keep this ID somewhere safe in case your browser data is ever cleared.
-        </p>
-
-        <div style={{ marginTop: "1rem" }}>
-          <button
-            type="button"
-            onClick={handleExportJournal}
-            disabled={sightings.length === 0}
-            style={{
-              padding: "0.5rem 0.75rem",
-              borderRadius: "6px",
-              border: "none",
-              backgroundColor: sightings.length === 0 ? "#999" : "#355c45",
-              color: "white",
-              cursor: sightings.length === 0 ? "not-allowed" : "pointer",
-            }}
-          >
-            Export Journal
-          </button>
-
-          <p
-            style={{
-              marginTop: "0.5rem",
-              marginBottom: 0,
-              fontSize: "0.85rem",
-              color: "#666",
-            }}
-          >
-            Save a copy of your journal as a CSV file.
-          </p>
-        </div>
-
-        <details style={{ marginTop: "1rem" }}>
-          <summary
-            style={{
-              cursor: "pointer",
-              fontWeight: 600,
-            }}
-          >
-            Import Journal
-          </summary>
-
-          <div style={{ marginTop: "1rem" }}>
-            <label
-              htmlFor="journalImport"
-              style={{
-                display: "inline-block",
-                padding: "0.5rem 0.75rem",
-                borderRadius: "6px",
-                border: "none",
-                backgroundColor: "#355c45",
-                color: "white",
-                cursor: "pointer",
-              }}
-            >
-              Choose a Backyard Bird Tracker CSV file
-            </label>
-
-            <input
-              id="journalImport"
-              type="file"
-              accept=".csv,text/csv"
-              onChange={handleImportFile}
-              style={{ display: "none" }}
-            />
-
-            {importFile && (
-              <p
-                style={{
-                  marginTop: "0.75rem",
-                  marginBottom: 0,
-                  fontSize: "0.85rem",
-                  color: "#666",
-                  wordBreak: "break-word",
-                }}
-              >
-                Selected file: <strong>{importFile.name}</strong>
-              </p>
-            )}
-
-            {importMessage && (
-              <p
-                style={{
-                  marginTop: "0.75rem",
-                  marginBottom: 0,
-                  fontSize: "0.9rem",
-                  color: importPreview.length > 0 ? "#355c45" : "#b91c1c",
-                }}
-              >
-                {importMessage}
-              </p>
-            )}
-
-            {importPreview.length > 0 && (
-              <div
-                style={{
-                  marginTop: "1rem",
-                  padding: "1rem",
-                  backgroundColor: "#f5f5f5",
-                  borderRadius: "6px",
-                }}
-              >
-                <strong>Import preview</strong>
-
-                <p
-                  style={{
-                    marginTop: "0.5rem",
-                    marginBottom: "0.75rem",
-                    fontSize: "0.9rem",
-                  }}
-                >
-                  This file contains <strong>{importPreview.length}</strong>{" "}
-                  {importPreview.length === 1 ? "sighting" : "sightings"} from{" "}
-                  <strong>
-                    {
-                      new Set(importPreview.map((sighting) => sighting.species))
-                        .size
-                    }
-                  </strong>{" "}
-                  {new Set(importPreview.map((sighting) => sighting.species))
-                    .size === 1
-                    ? "species"
-                    : "species"}
-                  .
-                </p>
-
-                <p
-                  style={{
-                    marginBottom: 0,
-                    fontSize: "0.85rem",
-                    color: "#666",
-                  }}
-                >
-                  No changes have been made to your journal.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleReplaceJournal}
-                  disabled={loading}
-                  style={{
-                    marginTop: "1rem",
-                    padding: "0.5rem 0.75rem",
-                    borderRadius: "6px",
-                    border: "none",
-                    backgroundColor: loading ? "#999" : "#355c45",
-                    color: "white",
-                    cursor: loading ? "not-allowed" : "pointer",
-                  }}
-                >
-                  {loading ? "Importing..." : "Replace Current Journal"}
-                </button>
-              </div>
-            )}
-          </div>
-        </details>
-
-        <div style={{ marginTop: "1rem" }}>
           <strong
             style={{
+              width: "100%",
               display: "block",
-              marginBottom: "0.35rem",
-              fontSize: "0.9rem",
+              marginBottom: "0.5rem",
             }}
           >
-            Your Journal ID
+            List Controls
           </strong>
+          <div
+            style={{
+              flex: "1 1 200px",
+              minWidth: 0,
+            }}
+          >
+            <label
+              htmlFor="speciesFilter"
+              style={{
+                display: "block",
+                marginBottom: "0.25rem",
+                fontSize: "0.9rem",
+                fontWeight: 500,
+              }}
+            >
+              Bird
+            </label>
+
+            <select
+              id="speciesFilter"
+              value={speciesFilter}
+              onChange={(e) => setSpeciesFilter(e.target.value)}
+              style={{
+                width: "100%",
+                maxWidth: "100%",
+                boxSizing: "border-box",
+                padding: "0.4rem",
+                border: "1px solid #ccc",
+                borderRadius: "6px",
+              }}
+            >
+              <option value="">All Birds</option>
+
+              {speciesOptions.map((bird) => (
+                <option key={bird} value={bird}>
+                  {bird}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setSpeciesFilter("")}
+            disabled={!speciesFilter}
+            style={{
+              padding: "0.4rem 0.7rem",
+              borderRadius: "6px",
+              backgroundColor: !speciesFilter ? "#d1d5db" : "#dc2626",
+              color: "white",
+              border: "1px solid #b91c1c",
+              cursor: !speciesFilter ? "not-allowed" : "pointer",
+              opacity: !speciesFilter ? 0.7 : 1,
+            }}
+          >
+            Clear
+          </button>
 
           <div
             style={{
-              display: "flex",
-              alignItems: "stretch",
-              gap: "0.5rem",
+              flex: "1 1 200px",
+              minWidth: 0,
             }}
           >
-            <div
+            <label
+              htmlFor="sortOrder"
               style={{
-                flex: 1,
-                minWidth: 0,
-                backgroundColor: "#f5f5f5",
-                padding: "0.75rem",
-                borderRadius: "6px",
-                fontSize: "0.85rem",
-                wordBreak: "break-all",
-                lineHeight: 1.4,
+                display: "block",
+                marginBottom: "0.25rem",
+                fontSize: "0.9rem",
+                fontWeight: 500,
               }}
             >
-              {journalId}
-            </div>
+              Sort
+            </label>
 
-            <button
-              type="button"
-              onClick={handleCopyJournalId}
+            <select
+              id="sortOrder"
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value as SortOrder)}
               style={{
-                padding: "0.5rem 0.75rem",
-                borderRadius: "6px",
+                width: "100%",
+                maxWidth: "100%",
+                boxSizing: "border-box",
+                padding: "0.4rem",
                 border: "1px solid #ccc",
-                backgroundColor: "white",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
+                borderRadius: "6px",
               }}
             >
-              {copyMessage || "Copy"}
-            </button>
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+            </select>
           </div>
         </div>
 
-        <details style={{ marginTop: "1rem" }}>
-          <summary
+        <div ref={sightingsRef}>
+          <SightingsList
+            groups={groupedSightings}
+            isFetching={isFetching}
+            deletingId={deletingId}
+            onDelete={handleDelete}
+            isFilterActive={speciesFilter !== ""}
+            onUpdateSighting={handleUpdateSighting}
+            birds={birds}
+          />
+        </div>
+
+        <div
+          style={{
+            marginTop: "2rem",
+            paddingTop: "1.5rem",
+            borderTop: "1px solid #ddd",
+          }}
+        >
+          <h2
             style={{
-              cursor: "pointer",
-              fontWeight: 600,
+              marginTop: 0,
+              fontSize: "1rem",
             }}
           >
-            Restore an existing journal
-          </summary>
+            Journal Recovery
+          </h2>
+
+          <p
+            style={{
+              fontSize: "0.9rem",
+              color: "#666",
+              lineHeight: 1.5,
+            }}
+          >
+            Your journal is connected to this browser using a unique Journal ID.
+            Keep this ID somewhere safe in case your browser data is ever
+            cleared.
+          </p>
 
           <div style={{ marginTop: "1rem" }}>
-            <label
-              htmlFor="recoveryId"
+            <button
+              type="button"
+              onClick={handleExportJournal}
+              disabled={sightings.length === 0}
+              style={{
+                padding: "0.5rem 0.75rem",
+                borderRadius: "6px",
+                border: "none",
+                backgroundColor: sightings.length === 0 ? "#999" : "#355c45",
+                color: "white",
+                cursor: sightings.length === 0 ? "not-allowed" : "pointer",
+              }}
+            >
+              Export Journal
+            </button>
+
+            <p
+              style={{
+                marginTop: "0.5rem",
+                marginBottom: 0,
+                fontSize: "0.85rem",
+                color: "#666",
+              }}
+            >
+              Save a copy of your journal as a CSV file.
+            </p>
+          </div>
+
+          <details style={{ marginTop: "1rem" }}>
+            <summary
+              style={{
+                cursor: "pointer",
+                fontWeight: 600,
+              }}
+            >
+              Import Journal
+            </summary>
+
+            <div style={{ marginTop: "1rem" }}>
+              <label
+                htmlFor="journalImport"
+                style={{
+                  display: "inline-block",
+                  padding: "0.5rem 0.75rem",
+                  borderRadius: "6px",
+                  border: "none",
+                  backgroundColor: "#355c45",
+                  color: "white",
+                  cursor: "pointer",
+                }}
+              >
+                Choose a Backyard Bird Tracker CSV file
+              </label>
+
+              <input
+                id="journalImport"
+                type="file"
+                accept=".csv,text/csv"
+                onChange={handleImportFile}
+                style={{ display: "none" }}
+              />
+
+              {importFile && (
+                <p
+                  style={{
+                    marginTop: "0.75rem",
+                    marginBottom: 0,
+                    fontSize: "0.85rem",
+                    color: "#666",
+                    wordBreak: "break-word",
+                  }}
+                >
+                  Selected file: <strong>{importFile.name}</strong>
+                </p>
+              )}
+
+              {importMessage && (
+                <p
+                  style={{
+                    marginTop: "0.75rem",
+                    marginBottom: 0,
+                    fontSize: "0.9rem",
+                    color: importPreview.length > 0 ? "#355c45" : "#b91c1c",
+                  }}
+                >
+                  {importMessage}
+                </p>
+              )}
+
+              {importPreview.length > 0 && (
+                <div
+                  style={{
+                    marginTop: "1rem",
+                    padding: "1rem",
+                    backgroundColor: "#f5f5f5",
+                    borderRadius: "6px",
+                  }}
+                >
+                  <strong>Import preview</strong>
+
+                  <p
+                    style={{
+                      marginTop: "0.5rem",
+                      marginBottom: "0.75rem",
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    This file contains <strong>{importPreview.length}</strong>{" "}
+                    {importPreview.length === 1 ? "sighting" : "sightings"} from{" "}
+                    <strong>
+                      {
+                        new Set(
+                          importPreview.map((sighting) => sighting.species),
+                        ).size
+                      }
+                    </strong>{" "}
+                    {new Set(importPreview.map((sighting) => sighting.species))
+                      .size === 1
+                      ? "species"
+                      : "species"}
+                    .
+                  </p>
+
+                  <p
+                    style={{
+                      marginBottom: 0,
+                      fontSize: "0.85rem",
+                      color: "#666",
+                    }}
+                  >
+                    No changes have been made to your journal.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleReplaceJournal}
+                    disabled={loading}
+                    style={{
+                      marginTop: "1rem",
+                      padding: "0.5rem 0.75rem",
+                      borderRadius: "6px",
+                      border: "none",
+                      backgroundColor: loading ? "#999" : "#355c45",
+                      color: "white",
+                      cursor: loading ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    {loading ? "Importing..." : "Replace Current Journal"}
+                  </button>
+                </div>
+              )}
+            </div>
+          </details>
+
+          <div style={{ marginTop: "1rem" }}>
+            <strong
               style={{
                 display: "block",
                 marginBottom: "0.35rem",
                 fontSize: "0.9rem",
               }}
             >
-              Previous Journal ID
-            </label>
+              Your Journal ID
+            </strong>
 
-            <input
-              id="recoveryId"
-              type="text"
-              value={recoveryId}
-              onChange={(e) => setRecoveryId(e.target.value)}
-              placeholder="Enter your previous Journal ID"
+            <div
               style={{
-                display: "block",
-                width: "100%",
-                boxSizing: "border-box",
-                padding: "0.5rem",
-                border: "1px solid #ccc",
-                borderRadius: "6px",
-                marginBottom: "0.75rem",
-              }}
-            />
-
-            <button
-              type="button"
-              onClick={handleJournalRecovery}
-              disabled={isRecovering}
-              style={{
-                padding: "0.5rem 0.75rem",
-                borderRadius: "6px",
-                border: "none",
-                backgroundColor: isRecovering ? "#999" : "#355c45",
-                color: "white",
-                cursor: isRecovering ? "not-allowed" : "pointer",
+                display: "flex",
+                alignItems: "stretch",
+                gap: "0.5rem",
               }}
             >
-              {isRecovering ? "Checking…" : "Restore Journal"}
-            </button>
-
-            {recoveryMessage && (
-              <p
+              <div
                 style={{
-                  marginTop: "0.75rem",
-                  color: "#666",
+                  flex: 1,
+                  minWidth: 0,
+                  backgroundColor: "#f5f5f5",
+                  padding: "0.75rem",
+                  borderRadius: "6px",
+                  fontSize: "0.85rem",
+                  wordBreak: "break-all",
+                  lineHeight: 1.4,
+                }}
+              >
+                {journalId}
+              </div>
+
+              <button
+                type="button"
+                onClick={handleCopyJournalId}
+                style={{
+                  padding: "0.5rem 0.75rem",
+                  borderRadius: "6px",
+                  border: "1px solid #ccc",
+                  backgroundColor: "white",
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {copyMessage || "Copy"}
+              </button>
+            </div>
+          </div>
+
+          <details style={{ marginTop: "1rem" }}>
+            <summary
+              style={{
+                cursor: "pointer",
+                fontWeight: 600,
+              }}
+            >
+              Restore an existing journal
+            </summary>
+
+            <div style={{ marginTop: "1rem" }}>
+              <label
+                htmlFor="recoveryId"
+                style={{
+                  display: "block",
+                  marginBottom: "0.35rem",
                   fontSize: "0.9rem",
                 }}
               >
-                {recoveryMessage}
-              </p>
-            )}
-          </div>
-        </details>
-      </div>
-    </main>
+                Previous Journal ID
+              </label>
+
+              <input
+                id="recoveryId"
+                type="text"
+                value={recoveryId}
+                onChange={(e) => setRecoveryId(e.target.value)}
+                placeholder="Enter your previous Journal ID"
+                style={{
+                  display: "block",
+                  width: "100%",
+                  boxSizing: "border-box",
+                  padding: "0.5rem",
+                  border: "1px solid #ccc",
+                  borderRadius: "6px",
+                  marginBottom: "0.75rem",
+                }}
+              />
+
+              <button
+                type="button"
+                onClick={handleJournalRecovery}
+                disabled={isRecovering}
+                style={{
+                  padding: "0.5rem 0.75rem",
+                  borderRadius: "6px",
+                  border: "none",
+                  backgroundColor: isRecovering ? "#999" : "#355c45",
+                  color: "white",
+                  cursor: isRecovering ? "not-allowed" : "pointer",
+                }}
+              >
+                {isRecovering ? "Checking…" : "Restore Journal"}
+              </button>
+
+              {recoveryMessage && (
+                <p
+                  style={{
+                    marginTop: "0.75rem",
+                    color: "#666",
+                    fontSize: "0.9rem",
+                  }}
+                >
+                  {recoveryMessage}
+                </p>
+              )}
+            </div>
+          </details>
+        </div>
+      </main>
+
+      <footer
+        style={{
+          maxWidth: "700px",
+          margin: "0 auto",
+          padding: "0 2rem 2rem",
+          width: "100%",
+          boxSizing: "border-box",
+          textAlign: "center",
+          fontSize: "0.85rem",
+          color: "#666",
+        }}
+      >
+        <a
+          href="/image-credits"
+          style={{
+            color: "#355c45",
+            fontWeight: 600,
+          }}
+        >
+          Image Credits
+        </a>
+      </footer>
+    </>
   );
 }
