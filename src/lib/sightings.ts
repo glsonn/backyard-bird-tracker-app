@@ -2,11 +2,32 @@ import { supabase } from "./supabase";
 import { getUserId } from "./userId";
 
 export async function getSightings() {
-  return await supabase
-    .from("sightings")
-    .select("*")
-    .eq("user_id", getUserId())
-    .order("created_at", { ascending: false });
+  const pageSize = 1000;
+  let allSightings: any[] = [];
+  let from = 0;
+
+  while (true) {
+    const { data, error } = await supabase
+      .from("sightings")
+      .select("*")
+      .eq("user_id", getUserId())
+      .order("created_at", { ascending: false })
+      .range(from, from + pageSize - 1);
+
+    if (error) {
+      return { data: null, error };
+    }
+
+    allSightings = [...allSightings, ...(data ?? [])];
+
+    if (!data || data.length < pageSize) {
+      break;
+    }
+
+    from += pageSize;
+  }
+
+  return { data: allSightings, error: null };
 }
 
 export async function findJournal(userId: string) {
